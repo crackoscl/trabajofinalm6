@@ -1,0 +1,27 @@
+
+<link rel="stylesheet" 
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" 
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" 
+      crossorigin="anonymous">
+    <!--<link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet" type="text/css"> -->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet"> 
+
+
+<div class="container">
+<div class=row>
+  <form method="post" action="{% url 'app:eliminar_examen' pk=pk %}" class="mt-4">
+  
+  {% csrf_token %}
+  
+    <h2 class="lead">Estas Seguro que quieres eliminar este examen <strong>?</strong></h2>
+  
+
+    <a href="{% url 'app:examenes' %}" class="btn btn-primary">Cerrar</a>
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+
+</form>
+</div>
+</div>
+
+
