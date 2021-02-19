@@ -6,7 +6,7 @@
  </button>
 </div>
 
-<form method="POST" action="{% url 'app:editar_examen'  id %}" class="js-create-form" novalidate>
+<form method="POST" action="{% url 'app:editar_examen'  id %}" class="js-update-form" novalidate>
   {% csrf_token %}
   <div class="modal-body">
    {% for field in formulario %}

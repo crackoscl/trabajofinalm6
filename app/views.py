@@ -142,26 +142,25 @@ def editar_examen(request,pk):
     data = dict() # pa meter cosas 
     if request.method == 'POST':
         formulario = Examen(request.POST)
-        # if formulario.is_valid():
-        #     datos_formulario = formulario.cleaned_data
-        #     datos_formulario['fecha'] = datos_formulario['fecha'].strftime("%Y-%m-%d")
-        #     Examenes.objects.create(
-        #         nombre = datos_formulario['nombre'],
-        #         valor = datos_formulario['valor'],
-        #         fecha = datos_formulario['fecha'],
-        #         observaciones = datos_formulario['observaciones']
-        #     )
-        #     data['formulario_is_valid'] = True
-        #     examenes = Examenes.objects.values()
-        #     data['html_examenes_list'] = render_to_string('app/examenes/Examenes_lista_parcial.html',{
-        #         'lista_examenes': examenes
-        #         })      
-        # else:
-        #     data['formulario_is_valid'] = False 
+        if formulario.is_valid():
+            datos_formulario = formulario.cleaned_data
+            datos_formulario['fecha'] = datos_formulario['fecha'].strftime("%Y-%m-%d")
+            Examenes.objects.filter(id=pk).update(
+                nombre = datos_formulario['nombre'],
+                valor = datos_formulario['valor'],
+                fecha = datos_formulario['fecha'],
+                observaciones = datos_formulario['observaciones']
+            )
+            data['formulario_is_valid'] = True
+            examenes = Examenes.objects.values()
+            data['html_examenes_list'] = render_to_string('app/examenes/Examenes_lista_parcial.html',{
+                'lista_examenes': examenes
+                })      
+        else:
+            data['formulario_is_valid'] = False 
     else:
         examen = Examenes.objects.filter(id=pk).values()[0]
         formulario = Examen(initial=examen)
-
     context = {'formulario': formulario,"id":pk}
     data['html_formulario'] = render_to_string('app/examenes/Examen_parcial_actualizar.html',
                                                context,

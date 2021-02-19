@@ -17,7 +17,7 @@ class Examen(forms.Form):
     nombre = forms.CharField(label="Nombre")
     valor = forms.CharField(label="valor")
     fecha = forms.DateField(label='Fecha de examen:', widget=forms.SelectDateWidget(years=range(1900,2022)))
-    observaciones = forms.CharField(widget=forms.Textarea(attrs={'rows':3, 'cols':50}))
+    observaciones = forms.CharField(widget=forms.Textarea(attrs={'rows':3, 'cols':20}))
     
     nombre.widget.attrs.update({'class': 'form-control'})
     valor.widget.attrs.update({'class': 'form-control'})
