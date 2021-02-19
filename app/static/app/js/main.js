@@ -46,7 +46,7 @@ $(function () {
   $("#boton-js").click(cargarForm);
   $("#modal-form").on("submit", ".js-create-form", guardarForm);
 
-
+  $("#tabla-datos").on("click", ".js-editar", cargarForm);
 
   // // Eliminar examen
   $("#tabla-datos").on("click", ".js-delete", cargarForm);
