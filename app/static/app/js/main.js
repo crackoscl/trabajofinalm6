@@ -49,8 +49,8 @@ $(function () {
 
 
   // // Eliminar examen
-  // $("#tabla-datos").on("click", ".js-delete", cargarForm);
-  // $("#modal-form").on("submit", ".delete-examen", guardarForm);
+  $("#tabla-datos").on("click", ".js-delete", cargarForm);
+  $("#modal-form").on("submit", ".js-delete-examen", guardarForm);
 
 });
 

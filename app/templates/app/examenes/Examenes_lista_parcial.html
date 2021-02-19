@@ -10,7 +10,11 @@
     <td>{{ examen.fecha }}</td>
     
     <td>
-      <a href="{% url 'app:eliminar_examen' pk=examen.id %}" class="btn btn-danger btn-sm ">Eliminar</a>
+      <button type="button"
+              class="btn btn-danger btn-sm js-delete"
+              data-url="{% url 'app:eliminar_examen' examen.id %}" >
+        <span class="glyphicon glyphicon-trash"></span> Eliminar
+      </button>
     </td>
   </tr>
 {% empty %}

@@ -2,7 +2,7 @@ import json
 from typing import ContextManager
 
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -138,29 +138,47 @@ def crear_examen(request):
 
 
 
-def eliminar_examen(request,pk):
-    
-    filename= "/app/data/base.json"
-    with open(str(settings.BASE_DIR)+filename, 'r') as file:
-        pacientes = json.load(file)
-    
-    if request.method == "POST":
-        for examen in pacientes['pacientes']:
-            print(examen['id'])
-            print(pk)
-            
-            if str(examen['id']) == str(pk):
-                pacientes['pacientes'].remove(examen)
-                break
-            
-        with open(str(settings.BASE_DIR)+filename, 'w') as file:
-            json.dump(pacientes,file)
-        return redirect('app:examenes')
 
+
+
+def book_delete(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    data = dict()
+    if request.method == 'POST':
+        book.delete()
+        data['form_is_valid'] = True  # This is just to play along with the existing code
+        books = Book.objects.all()
+        data['html_book_list'] = render_to_string('books/includes/partial_book_list.html', {
+            'books': books
+        })
     else:
-        
-        context = {'pk': pk}
-        return render(request, 'app/examenes/Eliminar_examen_parcial.html', context)
+        context = {'book': book}
+        data['html_formulario'] = render_to_string('app/examenes/Examen_parcial.html',
+                                               context,
+                                               request = request,)
+    return JsonResponse(data)
+
+
+
+
+
+def eliminar_examen(request,pk):
+    examen = get_object_or_404(Examenes, pk=pk)
+    data = dict()
+    if request.method == 'POST':
+        examen.delete()
+        data['formulario_is_valid'] = True
+        examenes = Examenes.objects.values()
+        data['html_examenes_list'] = render_to_string('app/examenes/Examenes_lista_parcial.html',{
+                'lista_examenes': examenes
+                })      
+    else:
+        context = {'examen': examen}
+        data['html_formulario'] = render_to_string('app/examenes/Eliminar_examen_parcial.html',
+            context,
+            request=request,
+        )
+    return JsonResponse(data)
             
 
 
