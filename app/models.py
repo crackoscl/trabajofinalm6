@@ -4,7 +4,7 @@ from django.db import models
 
 class Examenes(models.Model):
     nombre = models.CharField(max_length=50)
-    valores = models.CharField(max_length=50)
+    valor = models.CharField(max_length=50)
     fecha = models.DateField(auto_now=True)
     observaciones = models.CharField(max_length=250)
 
