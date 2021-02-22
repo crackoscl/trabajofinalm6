@@ -58,7 +58,9 @@ const orina = document.getElementById('orina');
 const dataglucosa = {{data.glucosa | safe }}
 const datahemograma = {{data.hemograma | safe }}
 const dataorina = {{data.orina | safe }}
-const meses = {{labels | safe }}
+const meses_glucosa = {{labels | safe }}
+const meses_orina = {{labels | safe }}
+const meses_hemograma = {{labels | safe }}
 const barType =  ['bar','line','pie']
 
 function chars(id, datos,dataLabel,dataType){
@@ -102,9 +104,9 @@ function chars(id, datos,dataLabel,dataType){
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-   chars(glucosa,dataglucosa,meses,barType[0]);
-   chars(hemograma,datahemograma,meses,barType[1]);
-   chars(orina,dataorina,meses,barType[2]);
+   chars(glucosa,dataglucosa,meses_glucosa,barType[0]);
+   chars(hemograma,datahemograma,meses_orina,barType[1]);
+   chars(orina,dataorina,meses_hemograma,barType[2]);
 
 });
 

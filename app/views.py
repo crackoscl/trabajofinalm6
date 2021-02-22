@@ -1,5 +1,7 @@
+from .models import Examenes, Administradores, Pacientes
 import json
 from typing import ContextManager
+import datetime
 
 
 from django.shortcuts import render, redirect
@@ -7,7 +9,9 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from .forms import Login, Examen, FormularioPacientes,Selectform
+from .models import Graficos
 
+import random
 
 # Create your views here.
 
@@ -72,25 +76,37 @@ def graficos(request):
     
     datos = {}
     glucosa = []
+    fecha_glucosa = []
     hemograma = []
+    fecha_hemograma = []
     orina = []
+    fecha_orina = []
     fechas = []
-        
-    filename = "/app/data/base.json"
-    with open(str(settings.BASE_DIR)+filename,'r') as file:
-        pacientes = json.load(file)
-        pacientes = pacientes['pacientes']
-        for item in pacientes:
-            for lista in item['examenes']:
-                glucosa.append(lista['glucosa'])
-                hemograma.append(lista['hemograma'])
-                orina.append(lista['orina'])
-                fechas.append(lista['fecha'])
+    
+    charts = Examenes.objects.values()
+    print('Este es el chart: ',charts)
+    for item in charts:
+        if item['nombre'] == 'glucosa':
+            glucosa.append(item['valor'])
+            fecha_glucosa.append(str(item['fecha']))
+        elif item['nombre'] == 'orina':
+            orina.append(item['valor'])
+            fecha_orina.append(str(item['fecha']))
+        elif item['nombre'] == 'hemograma':
+            hemograma.append(item['valor'])
+            fecha_hemograma.append(str(item['fecha']))
+    
+    print(len(glucosa))
+    print(len(hemograma))
+    print(len(orina)) 
     datos['glucosa'] = glucosa
+    datos['fecha_glucosa'] = fecha_glucosa
     datos['hemograma'] = hemograma
-    datos['orina'] = orina
-    datos['fechas'] = fechas
-    return render(request,'app/Graficos.html',{'labels': fechas,'data':datos})
+    datos['fecha_hemograma'] = fecha_hemograma     
+    datos['orina'] = orina   
+    datos['fecha_orina'] = fecha_orina
+    #print('Estas son las fechas:', datos['fechas'])
+    return render(request,'app/Graficos.html', {'labels':fecha_glucosa, 'labels':fecha_orina, 'labels':fecha_hemograma,'data':datos})
 
 
 def listar_examenes(request):
@@ -221,7 +237,51 @@ def agregar_usuario(request):
         else:
             context= {'formulario': formulario_devuelto}
             context.update(context_lista_pacientes())
-            return render(request, 'app/Agregar_usuario.html', context)
+            return render(request, 'app/agregar_usuario.html', context)
+        
+        
+def agregar_usuario_db(request):
+    
+    if request.method == 'GET':
+        formulario = FormularioPacientes()
+        context = {'formulario': formulario}
+        pacientes = Pacientes.objects.all()
+        context={ 'formulario': formulario,
+                 'lista_pacientes': pacientes}
+        print(context)
+        return render(request,'app/agregar_usuario_db.html',context)
+
+    elif request.method == 'POST':
+        #print('El post contiene:', request.POST)
+        
+        formulario_devuelto = FormularioPacientes(request.POST)
+        
+        if formulario_devuelto.is_valid() == True:
+            datos_formulario = formulario_devuelto.cleaned_data
+            datos_formulario['fecha']= datos_formulario['fecha'].strftime("%Y-%m-%d")
+            
+            Pacientes.objects.create(nombre= datos_formulario['nombre'],
+                                    correo= datos_formulario['correo'],
+                                    clave= datos_formulario['clave'],
+                                    rut= datos_formulario['rut'],
+                                    edad = datos_formulario['edad'],
+                                    fecha = datos_formulario['fecha'],
+                                    direccion= datos_formulario['direccion'],
+                                    ocupacion= datos_formulario['ocupacion'],
+                                    telefono = datos_formulario['telefono'],
+                                    foto = datos_formulario['foto'],
+                                    resumen= datos_formulario['resumen'],
+                                    educacion = datos_formulario['educacion'],
+                                    historial = datos_formulario['historial'],
+                                    examenes = Examenes.objects.all()[0],
+                                    )
+                
+            return redirect('app:agregar_usuario_db')
+             
+        else:
+            context= {'formulario': formulario_devuelto}
+            context.update(context_lista_pacientes())
+            return render(request, 'app/agregar_usuario_db.html', context)
         
 
 
@@ -248,6 +308,64 @@ def eliminar_pacientes(request, rut):
             json.dump(data, file)
             
         return redirect('app:agregar_usuario')
+    
+def eliminar_pacientes_db(request, rut):
+    
+    if request.method == 'GET':
+        context = {'rut': rut}
+        return render(request, 'app/eliminar_pacientes_db.html', context)
+    
+    if request.method == 'POST':
+        Pacientes.objects.filter(rut = rut).delete()
+        
+        return redirect('app:agregar_usuario_db')
+    
+    
+def editar_paciente_db(request, rut):
+    
+    if request.method == 'GET':
+        paciente= Pacientes.objects.filter(rut = rut).values()[0]
+        
+        formulario = FormularioPacientes(initial=paciente)
+        context = {'formulario':formulario, 'rut': rut}
+        return render( request, 'app/editar_paciente_db.html', context)
+    
+    elif request.method == 'POST':
+        formulario_devuelto = FormularioPacientes(request.POST)
+        if formulario_devuelto.is_valid() == True:
+            datos_formulario = formulario_devuelto.cleaned_data
+            datos_formulario['fecha']=datos_formulario['fecha'].strftime("%Y-%m-%d")
+            paciente = Pacientes.objects.filter(rut=rut).update(
+                                    nombre= datos_formulario['nombre'],
+                                    correo= datos_formulario['correo'],
+                                    clave= datos_formulario['clave'],
+                                    rut= datos_formulario['rut'],
+                                    edad = datos_formulario['edad'],
+                                    fecha = datos_formulario['fecha'],
+                                    direccion= datos_formulario['direccion'],
+                                    ocupacion= datos_formulario['ocupacion'],
+                                    telefono = datos_formulario['telefono'],
+                                    foto = datos_formulario['foto'],
+                                    resumen= datos_formulario['resumen'],
+                                    educacion = datos_formulario['educacion'],
+                                    historial = datos_formulario['historial']
+                                    )
+            return redirect('app:agregar_usuario_db')
+        else:
+            context = {'formulario': formulario_devuelto}
+            return render ( request, 'app/editar_paciente_db.html', context)
+        
 
+        
 
+def eliminar_pacientes_db(request, rut):
+    
+    if request.method == 'GET':
+        context = {'rut': rut}
+        return render(request, 'app/eliminar_pacientes_db.html', context)
+    
+    if request.method == 'POST':
+        Pacientes.objects.filter(rut = rut).delete()
+        
+        return redirect('app:agregar_usuario_db')
     

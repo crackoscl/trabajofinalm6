@@ -4,8 +4,8 @@ from django.db import models
 
 class Examenes(models.Model):
     nombre = models.CharField(max_length=50)
-    valores = models.CharField(max_length=50)
-    fecha = models.DateField(auto_now=True)
+    valor = models.CharField(max_length=50)
+    fecha = models.DateField()
     observaciones = models.CharField(max_length=250)
 
 class Administradores(models.Model):
@@ -14,16 +14,23 @@ class Administradores(models.Model):
     clave = models.CharField(max_length=50)
     
 class Pacientes(models.Model):
-    nombre = models.CharField(max_length=50)
-    apellido = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=100)
+    correo = models.EmailField(max_length=200)
+    clave = models.CharField(max_length=50, default='123456')
     rut = models.CharField(max_length=10)
     edad = models.IntegerField()
+    fecha = models.DateField()
     direccion = models.CharField(max_length=150)
-    fecha_nacimiento = models.DateField()
-    email = models.CharField(max_length=200)
-    telefono = models.CharField(max_length=15)
+    ocupacion = models.CharField(max_length=150, default='influencer')
+    telefono = models.CharField(max_length=20)
+    foto = models.CharField(max_length=100, default='complete info')
+    resumen= models.TextField(default='complete la info')
+    educacion=models.TextField(default='complete la info')
+    historial = models.TextField(default='complete la info')
     examenes = models.ForeignKey(Examenes, on_delete=models.CASCADE,null=True)
     
-    
+class Graficos(models.Model):
+    nombre = models.CharField(max_length=400)
+    valor = models.CharField(max_length=400)
     
 
