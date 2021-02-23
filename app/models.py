@@ -23,7 +23,7 @@ class Pacientes(models.Model):
     edad = models.IntegerField()
     direccion = models.CharField(max_length=150)
     fecha_nacimiento = models.DateField()
-    correo = models.CharField(max_length=200)
+    correo = models.EmailField(max_length=254)
     telefono = models.CharField(max_length=15)
     examenes = models.ForeignKey(Examenes, on_delete=models.CASCADE,null=True)
     
