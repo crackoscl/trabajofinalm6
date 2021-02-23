@@ -98,7 +98,9 @@ def graficos(request):
 def agendar(request):
     return render(request,'app/Agendar.html')
 
-
+##############################################
+################## GILBERT ###################
+##############################################
 
 def listar_examenes(request):
         examenes = Examenes.objects.values()
@@ -187,7 +189,9 @@ def eliminar_examen(request,pk):
     return JsonResponse(data)
             
 
-
+##############################################
+################## GILBERT ###################
+##############################################
 
 def context_lista_pacientes():
     filename = "/app/data/base.json"

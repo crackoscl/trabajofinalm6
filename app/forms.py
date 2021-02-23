@@ -24,6 +24,7 @@ class Examen(forms.Form):
     fecha.widget.attrs.update({'class': 'form-control'})
     observaciones.widget.attrs.update({'class': 'form-control'})
 
+
     
     
 class FormularioPacientes(forms.Form):
