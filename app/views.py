@@ -13,6 +13,7 @@ from .models import Graficos
 
 import random
 
+
 # Create your views here.
 
 def buscar(correo,clave,pacientes):
