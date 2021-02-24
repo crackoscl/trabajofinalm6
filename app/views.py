@@ -2,15 +2,11 @@ from .models import Examenes, Administradores, Pacientes
 import json
 from typing import ContextManager
 import datetime
-
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from .forms import Login, Examen, FormularioPacientes,Selectform
-from .models import Examenes
-
 
 # Create your views here.
 
@@ -95,9 +91,6 @@ def graficos(request):
             hemograma.append(item['valor'])
             fecha_hemograma.append(str(item['fecha']))
     
-    print(len(glucosa))
-    print(len(hemograma))
-    print(len(orina)) 
     datos['glucosa'] = glucosa
     datos['fecha_glucosa'] = fecha_glucosa
     datos['hemograma'] = hemograma
@@ -208,6 +201,14 @@ def eliminar_examen(request,pk):
 ##############################################
 
 
+
+
+def context_lista_pacientes():
+    filename = "/app/data/base.json"
+    with open(str(settings.BASE_DIR)+filename, 'r') as file:
+        pacientes = json.load(file)
+    context= {'lista_pacientes': pacientes['pacientes']}
+    return context
 
             
 def agregar_usuario_db(request):

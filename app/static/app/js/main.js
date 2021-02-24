@@ -30,6 +30,7 @@ $(function () {
         if (data.formulario_is_valid) {
           $("#tabla-datos tbody").html(data.html_examenes_list)
           $("#modal-form").modal("hide");
+          swal("Correcto", "Precione OK para cerrar!", "success");
         }
         else {
           $("#modal-form .modal-content").html(data.html_formulario)
