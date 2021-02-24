@@ -9,20 +9,24 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from .forms import Login, Examen, FormularioPacientes,Selectform
-from .models import Examenes
+
 
 
 # Create your views here.
 
-def buscar(correo,clave,pacientes):
-    for item in pacientes['pacientes']:
+def buscar(correo,clave,administradores, pacientes):
+    for item in administradores:
+        print("Estos son los campos obtenidos de administradores", item)
+        if item['correo'] == correo and item['clave'] == clave:
+            return True
+    for item in pacientes:
+        print("Estos son los campos obtenidos de pacientes", item)
         if item['correo'] == correo and item['clave'] == clave:
             return True
     
 def inicio(request):
     if request.method == "GET":
-        formulario = Login(request.GET)   
-        
+        formulario = Login(request.GET)
         context = {'formulario':formulario}
     return render(request,'app/index.html',context)
 
@@ -30,11 +34,11 @@ def login_user(request):
     if request.method == "POST":
         formulario_lleno = Login(request.POST)
         if formulario_lleno.is_valid() == True:
+            
             data = formulario_lleno.cleaned_data
-            filename = "/app/data/base.json"
-            with open(str(settings.BASE_DIR)+filename,'r') as file:
-                contactos = json.load(file) 
-            validar = buscar(data['correo'],data['clave'],contactos)
+            pacient = Pacientes.objects.values()
+            admins = Administradores.objects.values()
+            validar = buscar(data['correo'],data['clave'],admins, pacient)
             if validar == True:
                 return redirect('app:private')
             else:
@@ -95,9 +99,7 @@ def graficos(request):
             hemograma.append(item['valor'])
             fecha_hemograma.append(str(item['fecha']))
     
-    print(len(glucosa))
-    print(len(hemograma))
-    print(len(orina)) 
+    
     datos['glucosa'] = glucosa
     datos['fecha_glucosa'] = fecha_glucosa
     datos['hemograma'] = hemograma
@@ -208,7 +210,12 @@ def eliminar_examen(request,pk):
 ##############################################
 
 
-
+def context_lista_pacientes():
+    filename = "/app/data/base.json"
+    with open(str(settings.BASE_DIR)+filename, 'r') as file:
+        pacientes = json.load(file)
+    context= {'lista_pacientes': pacientes['pacientes']}
+    return context
             
 def agregar_usuario_db(request):
     
