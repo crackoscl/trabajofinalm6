@@ -15,6 +15,7 @@ def buscar(correo,clave,administradores, pacientes):
         print("Estos son los campos obtenidos de administradores", item)
         if item['correo'] == correo and item['clave'] == clave:
             return True
+        
     for item in pacientes:
         print("Estos son los campos obtenidos de pacientes", item)
         if item['correo'] == correo and item['clave'] == clave:
