@@ -1,12 +1,12 @@
 
  <div class="modal-header border-bottom-0">
-    <h5 class="modal-title" id="exampleModalLabel">Ingresar Examen</h5>
+    <h5 class="modal-title" id="exampleModalLabel">Actualizar</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
     <span aria-hidden="true">&times;</span>
  </button>
 </div>
 
-<form method="POST" action="{% url 'app:crearexamen' %}" class="js-create-form" novalidate>
+<form method="POST" action="{% url 'app:editar_examen'  id %}" class="js-update-form" novalidate>
   {% csrf_token %}
   <div class="modal-body">
    {% for field in formulario %}

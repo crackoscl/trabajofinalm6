@@ -1,17 +1,12 @@
 from .models import Examenes, Administradores, Pacientes
-import json
-from typing import ContextManager
+#from typing import ContextManager
 import datetime
-
-
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from .forms import Login, Examen, FormularioPacientes,Selectform
-from .models import Graficos
-
-import random
+from .models import Examenes
 
 
 # Create your views here.
@@ -110,17 +105,18 @@ def graficos(request):
     return render(request,'app/Graficos.html', {'labels':fecha_glucosa, 'labels':fecha_orina, 'labels':fecha_hemograma,'data':datos})
 
 
-def listar_examenes(request):
-    filename = "/app/data/base.json"
-    with open(str(settings.BASE_DIR)+filename,'r') as file:
-        pacientes = json.load(file)
-        context = {"lista_examenes": pacientes['pacientes']}
-        return render(request,'app/Examenes.html',context)
 
-
-        
 def agendar(request):
     return render(request,'app/Agendar.html')
+
+##############################################
+################## GILBERT ###################
+##############################################
+
+def listar_examenes(request):
+        examenes = Examenes.objects.values()
+        context = {"lista_examenes": examenes}
+        return render(request,'app/examenes/Examenes.html',context)
 
 
 def crear_examen(request):
@@ -131,31 +127,16 @@ def crear_examen(request):
         if formulario.is_valid():
             datos_formulario = formulario.cleaned_data
             datos_formulario['fecha'] = datos_formulario['fecha'].strftime("%Y-%m-%d")
-            
-            examenes = {
-                    "fecha":datos_formulario['fecha'],
-                    "hemograma":datos_formulario['hemograma'],
-                    "orina": datos_formulario['orina'],
-                    "colesterolhdl": datos_formulario['colesterolhdl'],
-                    "colesterolldl":datos_formulario['colesterolldl'],
-                    "glucosa":datos_formulario['glucosa']  
-                }
-            datos_formulario['examenes'] = []
-            filename = "/app/data/base.json"
-            with open(str(settings.BASE_DIR)+filename,'r') as file:
-                pacientes = json.load(file)   
-                for item in pacientes['pacientes']:
-                    if str(item['rut']) == str(datos_formulario['rut']):
-                        item['examenes'].append(examenes)
-                        data['formulario_is_valid'] = True
-                    else:
-                        data['formulario_is_valid'] = False
-            
-            with open(str(settings.BASE_DIR)+filename,'w') as file:
-                 json.dump(pacientes,file)
-            
-            data['html_examenes_list'] = render_to_string('app/Examenes_lista_parcial.html',{
-                'lista_examenes': pacientes['pacientes']
+            Examenes.objects.create(
+                nombre = datos_formulario['nombre'],
+                valor = datos_formulario['valor'],
+                fecha = datos_formulario['fecha'],
+                observaciones = datos_formulario['observaciones']
+            )
+            data['formulario_is_valid'] = True
+            examenes = Examenes.objects.values()
+            data['html_examenes_list'] = render_to_string('app/examenes/Examenes_lista_parcial.html',{
+                'lista_examenes': examenes
                 })      
         else:
             data['formulario_is_valid'] = False 
@@ -163,37 +144,65 @@ def crear_examen(request):
         formulario = Examen()
     
     context = {'formulario': formulario}
-    data['html_formulario'] = render_to_string('app/Examen_parcial.html',
+    data['html_formulario'] = render_to_string('app/examenes/Examen_parcial.html',
                                                context,
                                                request = request,)
     return JsonResponse(data)
 
-def eliminar_examen(request,pk):
-    
-    filename= "/app/data/base.json"
-    with open(str(settings.BASE_DIR)+filename, 'r') as file:
-        pacientes = json.load(file)
-    
-    if request.method == "POST":
-        for examen in pacientes['pacientes']:
-            print(examen['id'])
-            print(pk)
-            
-            if str(examen['id']) == str(pk):
-                pacientes['pacientes'].remove(examen)
-                break
-            
-        with open(str(settings.BASE_DIR)+filename, 'w') as file:
-            json.dump(pacientes,file)
-        return redirect('app:examenes')
 
+
+def editar_examen(request,pk):
+    data = dict() # pa meter cosas 
+    if request.method == 'POST':
+        formulario = Examen(request.POST)
+        if formulario.is_valid():
+            datos_formulario = formulario.cleaned_data
+            datos_formulario['fecha'] = datos_formulario['fecha'].strftime("%Y-%m-%d")
+            Examenes.objects.filter(id=pk).update(
+                nombre = datos_formulario['nombre'],
+                valor = datos_formulario['valor'],
+                fecha = datos_formulario['fecha'],
+                observaciones = datos_formulario['observaciones']
+            )
+            data['formulario_is_valid'] = True
+            examenes = Examenes.objects.values()
+            data['html_examenes_list'] = render_to_string('app/examenes/Examenes_lista_parcial.html',{
+                'lista_examenes': examenes
+                })      
+        else:
+            data['formulario_is_valid'] = False 
     else:
-        
-        context = {'pk': pk}
-        return render(request, 'app/Eliminar_examen_parcial.html', context)
+        examen = Examenes.objects.filter(id=pk).values()[0]
+        formulario = Examen(initial=examen)
+    context = {'formulario': formulario,"id":pk}
+    data['html_formulario'] = render_to_string('app/examenes/Examen_parcial_actualizar.html',
+                                               context,
+                                               request = request,)
+    return JsonResponse(data)
+
+
+def eliminar_examen(request,pk):
+    examen = get_object_or_404(Examenes, pk=pk)
+    data = dict()
+    if request.method == 'POST':
+        examen.delete()
+        data['formulario_is_valid'] = True
+        examenes = Examenes.objects.values()
+        data['html_examenes_list'] = render_to_string('app/examenes/Examenes_lista_parcial.html',{
+                'lista_examenes': examenes
+                })      
+    else:
+        context = {'examen': examen}
+        data['html_formulario'] = render_to_string('app/examenes/Eliminar_examen_parcial.html',
+            context,
+            request=request,
+        )
+    return JsonResponse(data)
             
 
-
+##############################################
+################## GILBERT ###################
+##############################################
 
 def context_lista_pacientes():
     filename = "/app/data/base.json"

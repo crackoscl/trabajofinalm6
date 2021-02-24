@@ -7,6 +7,9 @@ class Examenes(models.Model):
     valor = models.CharField(max_length=50)
     fecha = models.DateField()
     observaciones = models.CharField(max_length=250)
+    
+    class Meta:
+        ordering = ['id']
 
 class Administradores(models.Model):
     nombre = models.CharField(max_length=50)
@@ -29,8 +32,6 @@ class Pacientes(models.Model):
     historial = models.TextField(default='complete la info')
     examenes = models.ForeignKey(Examenes, on_delete=models.CASCADE,null=True)
     
-class Graficos(models.Model):
-    nombre = models.CharField(max_length=400)
-    valor = models.CharField(max_length=400)
+
     
 

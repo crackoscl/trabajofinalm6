@@ -14,23 +14,17 @@ class Login(forms.Form):
     
 class Examen(forms.Form):
     
-    rut = forms.CharField(label="Rut")
+    nombre = forms.CharField(label="Nombre")
+    valor = forms.CharField(label="valor")
     fecha = forms.DateField(label='Fecha de examen:', widget=forms.SelectDateWidget(years=range(1900,2022)))
-    hemograma = forms.CharField(label="Hemograma")
-    orina = forms.CharField(label="Orina")
-    colesterolhdl = forms.CharField(label="HDL")
-    colesterolldl = forms.CharField(label="LDL")
-    glucosa = forms.CharField(label="Glucosa")
+    observaciones = forms.CharField(widget=forms.Textarea(attrs={'rows':3, 'cols':20}))
     
-    #nombre.widget.attrs.update({'class': 'form-control'})
-    rut.widget.attrs.update({'class': 'form-control'})
-    #edad.widget.attrs.update({'class': 'form-control'})
+    nombre.widget.attrs.update({'class': 'form-control'})
+    valor.widget.attrs.update({'class': 'form-control'})
     fecha.widget.attrs.update({'class': 'form-control'})
-    hemograma.widget.attrs.update({'class': 'form-control'})
-    orina.widget.attrs.update({'class': 'form-control'})
-    colesterolhdl.widget.attrs.update({'class': 'form-control'})
-    colesterolldl.widget.attrs.update({'class': 'form-control'})
-    glucosa.widget.attrs.update({'class': 'form-control'})
+    observaciones.widget.attrs.update({'class': 'form-control'})
+
+
     
     
 class FormularioPacientes(forms.Form):

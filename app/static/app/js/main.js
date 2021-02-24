@@ -46,11 +46,12 @@ $(function () {
   $("#boton-js").click(cargarForm);
   $("#modal-form").on("submit", ".js-create-form", guardarForm);
 
-
+  $("#tabla-datos").on("click", ".js-editar", cargarForm);
+  $("#modal-form").on("submit", ".js-update-form", guardarForm);
 
   // // Eliminar examen
-  // $("#tabla-datos").on("click", ".js-delete", cargarForm);
-  // $("#modal-form").on("submit", ".delete-examen", guardarForm);
+  $("#tabla-datos").on("click", ".js-delete", cargarForm);
+  $("#modal-form").on("submit", ".js-delete-examen", guardarForm);
 
 });
 

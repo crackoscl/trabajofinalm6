@@ -224,3 +224,7 @@ h1 {text-align: center;
   background: #1abc9c;
   color: white !important
 }
+
+#modalLoginForm{
+  color: #000000;
+}
