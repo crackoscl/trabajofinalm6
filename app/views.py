@@ -1,6 +1,9 @@
 from .models import Examenes, Administradores, Pacientes
-#from typing import ContextManager
+import json
+from typing import ContextManager
 import datetime
+
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.http import JsonResponse
@@ -102,7 +105,7 @@ def graficos(request):
     datos['orina'] = orina   
     datos['fecha_orina'] = fecha_orina
     #print('Estas son las fechas:', datos['fechas'])
-    return render(request,'app/Graficos.html', {'labels':fecha_glucosa, 'labels':fecha_orina, 'labels':fecha_hemograma,'data':datos})
+    return render(request,'app/Graficos.html', {'labels_glucosa':fecha_glucosa, 'labels_orina':fecha_orina, 'labels_hemograma':fecha_hemograma,'data':datos})
 
 
 
@@ -204,52 +207,9 @@ def eliminar_examen(request,pk):
 ################## GILBERT ###################
 ##############################################
 
-def context_lista_pacientes():
-    filename = "/app/data/base.json"
-    with open(str(settings.BASE_DIR)+filename, 'r') as file:
-        pacientes = json.load(file)
-    context= {'lista_pacientes': pacientes['pacientes']}
-    return context
-    
 
-def agregar_usuario(request):
-    
-    if request.method == 'GET':
-        formulario = FormularioPacientes()
-        context = {'formulario': formulario}
-        context.update(context_lista_pacientes())
-        #print(context)
-        return render(request,'app/Agregar_usuario.html',context)
 
-    elif request.method == 'POST':
-        #print('El post contiene:', request.POST)
-        
-        formulario_devuelto = FormularioPacientes(request.POST)
-        
-        if formulario_devuelto.is_valid() == True:
-            datos_formulario = formulario_devuelto.cleaned_data
-            datos_formulario['fecha']= datos_formulario['fecha'].strftime("%Y-%m-%d")
-            datos_formulario['examenes'] = []
             
-           # print ('los datos limpios del formulario son: ', datos_formulario)
-            filename = '/app/data/base.json'
-            with open(str(settings.BASE_DIR)+ filename, 'r') as file:
-                data= json.load(file)
-                nuevo_ultimo_id = int(data['ultimo_id']) + 1
-                data['ultimo_id'] = nuevo_ultimo_id
-                datos_formulario['id'] = nuevo_ultimo_id
-                data['pacientes'].append(datos_formulario)
-            with open(str(settings.BASE_DIR)+ filename, 'w') as file:
-                json.dump(data, file)
-                
-            return redirect('app:agregar_usuario')
-             
-        else:
-            context= {'formulario': formulario_devuelto}
-            context.update(context_lista_pacientes())
-            return render(request, 'app/agregar_usuario.html', context)
-        
-        
 def agregar_usuario_db(request):
     
     if request.method == 'GET':
@@ -300,24 +260,6 @@ def lista_pacientes(request):
     return render( request, 'app/lista_pacientes.html', context)
 
 
-def eliminar_pacientes(request, rut):
-    
-    if request.method == "GET":
-        context = { 'rut': rut}
-        return render( request, 'app/eliminar_pacientes.html', context)
-    
-    if request.method == "POST":
-        filename ="/app/data/base.json"
-        with open(str(settings.BASE_DIR)+filename, 'r') as file:
-            data=json.load(file)
-        for paciente in data['pacientes']:
-            if str(paciente['rut']) == rut:
-                data['pacientes'].remove(paciente)
-                break
-        with open(str(settings.BASE_DIR)+filename, 'w') as file:
-            json.dump(data, file)
-            
-        return redirect('app:agregar_usuario')
     
 def eliminar_pacientes_db(request, rut):
     

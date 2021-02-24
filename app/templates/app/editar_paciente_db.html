@@ -33,8 +33,17 @@
                                       
                                       </tr>
                                     </thead>
-                                    <input type="submit" value="Editar">
-                                    <a href="{% url 'app:agregar_usuario_db' %}"><input type="button" value="Cancelar"></a>
+                                    <tr>
+                                        <td>
+                                            <a  ><input type="submit" value="Guardar" class="btn btn-primary"></a> 
+                                         </td>
+                                         <td>
+                                             <a  href="{% url 'app:agregar_usuario_db' %}"><input type="button" value="Cancelar" class="btn btn-danger"></a>
+                                         </td>
+                                    </tr>
+                                   
+                                    
+                                   
                                 </form>
                                
                                   </table>

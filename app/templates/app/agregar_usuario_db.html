@@ -52,12 +52,15 @@
                                           <td>{{pacientes.direccion}}</td>
                                           <td>{{pacientes.edad }}</td>
                                           <td>{{pacientes.telefono}}</td>
-                                          <td>{{pacientes.fecha_nacimiento }}</td>
+                                          <td>{{pacientes.fecha }}</td>
                                           <td>
-                                            
-                                          <td/>
-                                          <a href="{% url 'app:eliminar_pacientes_db' rut=pacientes.rut %}" class="btn btn-danger">Borrar</a>
                                             <a href="{% url 'app:editar_paciente_db' rut=pacientes.rut %}" class="btn btn-primary">Editar</a>
+                                          </td>
+                                          <td>
+                                            <a href="{% url 'app:eliminar_pacientes_db' rut=pacientes.rut %}" class="btn btn-danger">Borrar</a>
+                                            
+                                          </td>
+                                          
                                       <tr>
                                       {% endfor %}
                                     </tbody>
