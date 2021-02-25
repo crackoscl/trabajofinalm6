@@ -5,7 +5,7 @@ $(function () {
 
   var cargarForm = function () {
     var btn = $(this);
-    console.log(btn.attr)
+  
     $.ajax({
       url: btn.attr("data-url"),
       type: 'get',
@@ -27,6 +27,7 @@ $(function () {
       type: form.attr("method"),
       dataType: 'json',
       success: function (data) {
+        console.log(data)
         if (data.formulario_is_valid) {
           $("#tabla-datos tbody").html(data.html_examenes_list)
           $("#modal-form").modal("hide");

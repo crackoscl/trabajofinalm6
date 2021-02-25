@@ -1,10 +1,10 @@
 {% extends "base_privada.html" %}
 {% load static %}
 
-
+            
          {% block imagenperfil %}
                 {% if perfiluser %}
-                    <img class="img-fluid rounded" src="{{perfiluser.perfil.foto}}">
+                    <img class="img-fluid rounded" src="{{perfiluser.foto}}">
                 {% else %}
                     <img class="img-fluid rounded" src="{% static 'app/img/profe luis.jpg' %}">
                 {% endif %}
@@ -15,7 +15,7 @@
             <div class="block-header">
             {% include 'app/perfil_form.html' %}
                 {% if perfiluser %}
-                    <h2>Perfil {{perfiluser.perfil.nombre}}</h2>
+                    <h2>Perfil {{perfiluser.nombre}}</h2>
                 {% else %}
                     <h2>Perfil Luis Jaraquemada</h2>
                 {% endif %}
@@ -26,7 +26,7 @@
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="card profile">
                         {% if perfiluser %}
-                            <img class="img-fluid" src="{{perfiluser.perfil.foto}}" alt="">
+                            <img class="img-fluid" src="{{perfiluser.foto}}" alt="">
                         {% else %}
                             <img class="img-fluid" src="{% static 'app/img/TiCn5dVo_400x400.jpg' %}" alt="">
                         {% endif %}
@@ -38,34 +38,34 @@
                         <div class="body">
                             <strong>Nombre</strong>
                             {% if perfiluser %}
-                               <p>{{perfiluser.perfil.nombre}}</p>
+                               <p>{{perfiluser.nombre}}</p>
                             {% else %}
                              <p>Luis Jaraquemada</p>
                             {% endif %}
                            
                             <strong>Occupation</strong>
                             {% if perfiluser %}
-                               <p>{{perfiluser.perfil.ocupacion}}</p>
+                               <p>{{perfiluser.ocupacion}}</p>
                             {% else %}
                                 <p>Linux Lover</p>
                             {% endif %}
                             
                             <strong>Email</strong>
                             {% if perfiluser %}
-                               <p>{{perfiluser.perfil.correo}}</p>
+                               <p>{{perfiluser.correo}}</p>
                             {% else %}
                                 <p>norecuerdoelEmail@gmail.com</p>
                             {% endif %}
                             <strong>Telefono</strong>
                             {% if perfiluser %}
-                               <p>{{perfiluser.perfil.telefono}}</p>
+                               <p>{{perfiluser.telefono}}</p>
                             {% else %}
                                 <p>+5691506045</p>
                             {% endif %}
                             <hr>
                             <strong>Direccion</strong>
                             {% if perfiluser %}
-                               <p>{{perfiluser.perfil.direccion}}</p>
+                               <p>{{perfiluser.direccion}}</p>
                             {% else %}
                               <address>pasaje #1000,Santiago</address>
                             {% endif %}
@@ -96,7 +96,7 @@
                                             <div class="post-list">
                                                 <div class="post-box">
                                                     {% if perfiluser %}
-                                                        <p>{{perfiluser.perfil.resumen}}</p>
+                                                        <p>{{perfiluser.resumen}}</p>
                                                         {% else %}
                                                          <p>Paciente presenta hipertension y colesterol alto
                                                             El 11 de Noviembre se deriva al cardiologo Mario Adad para toma de examenes
@@ -157,7 +157,7 @@
                                                     <ul class="dis">
                                                     
                                                     {% if perfiluser %}
-                                                      <li>{{perfiluser.perfil.educacion}}</li>
+                                                      <li>{{perfiluser.educacion}}</li>
                                                     {% else %}
                                                         <li> Ingeniero Informatico</li>
                                                     {% endif %}
