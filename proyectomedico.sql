@@ -209,6 +209,7 @@ ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('p
 --
 
 COPY public.app_administradores (id, nombre, correo, clave) FROM stdin;
+1	admin	admin@awake.com	123456
 \.
 
 
@@ -233,7 +234,7 @@ COPY public.app_examenes (id, nombre, valor, fecha, observaciones, paciente_id) 
 --
 
 COPY public.app_pacientes (id, nombre, correo, clave, rut, edad, fecha, direccion, ocupacion, telefono, foto, resumen, educacion, historial) FROM stdin;
-7	Luis Jaraquemada	luis.jaraquemada@team.awakelab.cl		1000000-5	56	2020-12-05	Santiago #45450	redes y python master	9405653554	http://yofui.com/CLFotosFiles/Evento00000866/YoFui0000000400844604-6.JPG	paciente ............	allala lalala lalalla\r\nlalala laalal alala a	lalal a\r\nlallala \r\nllla \r\nlalalalala
+7	Luis Jaraquemada	luis.jaraquemada@team.awakelab.cl	123456	1000000-5	56	2020-12-05	Santiago #45450	redes y python master	9405653554	http://yofui.com/CLFotosFiles/Evento00000866/YoFui0000000400844604-6.JPG	paciente ............	allala lalala lalalla\r\nlalala laalal alala a	lalal a\r\nlallala \r\nllla \r\nlalalalala
 5	Jose guerra	jose@hotmail.com	123456	15896752-2	100	2020-12-05	las carmelitas valpo	Telecommunication Specialist	9405653554	https://media-exp1.licdn.com/dms/image/C5603AQH2_0aQAqfJPA/profile-displayphoto-shrink_200_200/0/1517395160883?e=1619654400&v=beta&t=Uy_blZEEfmdETNKayjOjnP_VZ9stM4L9C-XE5Ngd1Yw	lalal allal alaala prueba prueba	la vida	orina completa \r\norina
 6	Gilbert Lagos	gilbert@gmail.com	123456	15896752-2	36	2020-12-05	las carmelitas valpo	redes y python master	5698406646	https://media-exp1.licdn.com/dms/image/C5603AQFUjuNCjWy-wQ/profile-displayphoto-shrink_200_200/0/1517629716467?e=1619654400&v=beta&t=luNfnvnHsqiw-iobq2kGJhKpof6qRYcnlGgPUiJ1mJE	la lala ala alaaalal	la vida 2	dseod dejojd e dewjd wpejd pw
 2	john bruna	joncito@gmail.com		20380930-2	36	2020-12-05	las cabras #3500	Telecommunication Specialist	9405653554	https://media-exp1.licdn.com/dms/image/C5603AQEjGwKBiXp4Cg/profile-displayphoto-shrink_200_200/0/1607380799059?e=1619654400&v=beta&t=o6OpLNmhSvNVQhWAmccfJFOo3CebcjHF-e6UfkA1AAU	sdewi dewihd ewiohd iwehd ohewoid ewihdew hdihew iohd eowihdo ewhdiehw odhewdh iweohd ohewoihdihwe doihewiohd iweoh doihew oidhoeiwhd owehd ohweoihdeow ihdowe	dwehdoh wehdiohew odh ewodh eowhd eiwohdewiohd ewhdoi ewhoidh eoiwhd ew dihewid hiweo d ewihd weoh dihewoi dhweoihd ew	dihwedo ewhdiweo hdoihew oidhew hdowehdihewihd ohewo idhewodhewi dowehd ohewoi doiwedh oeiwhd oihewo dhiweo hdihew oidh oiweh doe
@@ -255,7 +256,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 -- Name: app_administradores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.app_administradores_id_seq', 1, false);
+SELECT pg_catalog.setval('public.app_administradores_id_seq', 1, true);
 
 
 --
