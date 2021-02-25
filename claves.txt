@@ -1,5 +1,2 @@
 usuario : luis.jaraquemada@team.awakelab.cl
 clave: 123456
-
-usuario: jona@wake.com
-clave : 123456
