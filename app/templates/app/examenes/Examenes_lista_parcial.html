@@ -6,6 +6,7 @@
   <td>{{ examen.valor }}</td>
   <td>{{ examen.observaciones }}</td>
   <td>{{ examen.fecha }}</td>
+  <td>{{ examen.paciente}}</td>
   <td>
   <button type="button" class="btn btn-warning btn-block js-editar" data-url="{% url 'app:editar_examen' examen.id %}">
     <span class="glyphicon glyphicon-trash"></span>Editar

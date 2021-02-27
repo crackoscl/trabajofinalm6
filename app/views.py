@@ -1,16 +1,11 @@
 from .models import Examenes, Administradores, Pacientes
-import json
 from typing import ContextManager
 import datetime
-
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from .forms import Login, Examen, FormularioPacientes,Selectform
-
-
 
 # Create your views here.
 
@@ -19,6 +14,7 @@ def buscar(correo,clave,administradores, pacientes):
         print("Estos son los campos obtenidos de administradores", item)
         if item['correo'] == correo and item['clave'] == clave:
             return True
+        
     for item in pacientes:
         print("Estos son los campos obtenidos de pacientes", item)
         if item['correo'] == correo and item['clave'] == clave:
@@ -50,27 +46,23 @@ def login_user(request):
 
 
 
-perfilusuario = dict()
-
 def private(request):
-    
-    filename = "/app/data/base.json"
-    with open(str(settings.BASE_DIR)+filename,'r') as file:
-        perfiles = json.load(file)  
-         
     if request.method == "POST":
-        usuarios = request.POST.get('usuarios')
+        id_usuario = request.POST.get('usuarios')
+        perfiles = Pacientes.objects.values()
+        for perfil in perfiles:
+            if int(perfil['id'] == int(id_usuario)):
+                usuario = perfil    
+        return render(request,'app/Privada.html',{"perfiluser": usuario,'perfiles':perfiles})
         
-        for perfil in perfiles['pacientes']:
-            if str(perfil['id']) == str(usuarios):
-                perfilusuario['perfil'] = perfil
             
-        return redirect('app:private')
+        return redirect('app:private') ### render post de usuario
    
     elif request.method == "GET":
-        print(perfilusuario)
         formulario = Selectform(request.GET)
-        context = {'formulario':formulario,'perfiles':perfiles['pacientes'],"perfiluser":perfilusuario}
+        perfiles = reversed(Pacientes.objects.values())
+        perfilusuario = Pacientes.objects.values()
+        context = {'formulario':formulario,'perfiles':perfiles,"perfiluser":perfilusuario[4]}
         return render(request,'app/Privada.html',context)
    
     
@@ -87,7 +79,6 @@ def graficos(request):
     fechas = []
     
     charts = Examenes.objects.values()
-    print('Este es el chart: ',charts)
     for item in charts:
         if item['nombre'] == 'glucosa':
             glucosa.append(item['valor'])
@@ -106,7 +97,6 @@ def graficos(request):
     datos['fecha_hemograma'] = fecha_hemograma     
     datos['orina'] = orina   
     datos['fecha_orina'] = fecha_orina
-    #print('Estas son las fechas:', datos['fechas'])
     return render(request,'app/Graficos.html', {'labels_glucosa':fecha_glucosa, 'labels_orina':fecha_orina, 'labels_hemograma':fecha_hemograma,'data':datos})
 
 
@@ -114,12 +104,8 @@ def graficos(request):
 def agendar(request):
     return render(request,'app/Agendar.html')
 
-##############################################
-################## GILBERT ###################
-##############################################
-
 def listar_examenes(request):
-        examenes = Examenes.objects.values()
+        examenes = Examenes.objects.all()
         context = {"lista_examenes": examenes}
         return render(request,'app/examenes/Examenes.html',context)
 
@@ -136,10 +122,11 @@ def crear_examen(request):
                 nombre = datos_formulario['nombre'],
                 valor = datos_formulario['valor'],
                 fecha = datos_formulario['fecha'],
-                observaciones = datos_formulario['observaciones']
+                observaciones = datos_formulario['observaciones'],
+                paciente = datos_formulario['paciente']
             )
             data['formulario_is_valid'] = True
-            examenes = Examenes.objects.values()
+            examenes = Examenes.objects.all()
             data['html_examenes_list'] = render_to_string('app/examenes/Examenes_lista_parcial.html',{
                 'lista_examenes': examenes
                 })      
@@ -167,10 +154,11 @@ def editar_examen(request,pk):
                 nombre = datos_formulario['nombre'],
                 valor = datos_formulario['valor'],
                 fecha = datos_formulario['fecha'],
-                observaciones = datos_formulario['observaciones']
+                observaciones = datos_formulario['observaciones'],
+                paciente = datos_formulario['paciente']
             )
             data['formulario_is_valid'] = True
-            examenes = Examenes.objects.values()
+            examenes = Examenes.objects.all()
             data['html_examenes_list'] = render_to_string('app/examenes/Examenes_lista_parcial.html',{
                 'lista_examenes': examenes
                 })      
@@ -192,7 +180,7 @@ def eliminar_examen(request,pk):
     if request.method == 'POST':
         examen.delete()
         data['formulario_is_valid'] = True
-        examenes = Examenes.objects.values()
+        examenes = Examenes.objects.all()
         data['html_examenes_list'] = render_to_string('app/examenes/Examenes_lista_parcial.html',{
                 'lista_examenes': examenes
                 })      
@@ -205,17 +193,14 @@ def eliminar_examen(request,pk):
     return JsonResponse(data)
             
 
-##############################################
-################## GILBERT ###################
-##############################################
-
 
 def context_lista_pacientes():
-    filename = "/app/data/base.json"
-    with open(str(settings.BASE_DIR)+filename, 'r') as file:
-        pacientes = json.load(file)
-    context= {'lista_pacientes': pacientes['pacientes']}
+    
+    pacientes = Pacientes.objects.values()
+    context= {'lista_pacientes': pacientes}
+    print(context)
     return context
+
             
 def agregar_usuario_db(request):
     
@@ -229,7 +214,7 @@ def agregar_usuario_db(request):
         return render(request,'app/agregar_usuario_db.html',context)
 
     elif request.method == 'POST':
-        #print('El post contiene:', request.POST)
+       
         
         formulario_devuelto = FormularioPacientes(request.POST)
         
@@ -250,7 +235,7 @@ def agregar_usuario_db(request):
                                     resumen= datos_formulario['resumen'],
                                     educacion = datos_formulario['educacion'],
                                     historial = datos_formulario['historial'],
-                                    examenes = Examenes.objects.all()[0],
+                                
                                     )
                 
             return redirect('app:agregar_usuario_db')
@@ -260,12 +245,6 @@ def agregar_usuario_db(request):
             context.update(context_lista_pacientes())
             return render(request, 'app/agregar_usuario_db.html', context)
         
-
-
-def lista_pacientes(request):
-    context = context_lista_pacientes()
-    return render( request, 'app/lista_pacientes.html', context)
-
 
     
 def eliminar_pacientes_db(request, rut):
@@ -314,9 +293,7 @@ def editar_paciente_db(request, rut):
             context = {'formulario': formulario_devuelto}
             return render ( request, 'app/editar_paciente_db.html', context)
         
-
         
-
 def eliminar_pacientes_db(request, rut):
     
     if request.method == 'GET':
@@ -327,4 +304,3 @@ def eliminar_pacientes_db(request, rut):
         Pacientes.objects.filter(rut = rut).delete()
         
         return redirect('app:agregar_usuario_db')
-    

@@ -1,6 +1,7 @@
 
 from django import forms
 from django.core import validators
+from .models import Pacientes
 
    
 class Login(forms.Form):
@@ -14,11 +15,13 @@ class Login(forms.Form):
     
 class Examen(forms.Form):
     
-    nombre = forms.CharField(label="Nombre")
+    paciente = forms.ModelChoiceField(queryset=Pacientes.objects.all())
+    nombre = forms.CharField(label="Nombre Examen")
     valor = forms.CharField(label="valor")
     fecha = forms.DateField(label='Fecha de examen:', widget=forms.SelectDateWidget(years=range(1900,2022)))
     observaciones = forms.CharField(widget=forms.Textarea(attrs={'rows':3, 'cols':20}))
     
+    paciente.widget.attrs.update({'class': 'form-control'})
     nombre.widget.attrs.update({'class': 'form-control'})
     valor.widget.attrs.update({'class': 'form-control'})
     fecha.widget.attrs.update({'class': 'form-control'})
