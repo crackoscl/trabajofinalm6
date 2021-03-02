@@ -46,7 +46,8 @@
             <span class="badge bg-success"> Usuario Activo: {{ user.username }}</span>
         </div>
           <div class="text-center">
-            <a href="{% url 'logout' %}?next={% url 'app:inicio' %}" class="btn btn-danger border-dark font-weight-bold text-white my-2 my-sm-0">
+            <a href="{% url 'logout' %}" class="btn btn-danger border-dark font-weight-bold text-white my-2 my-sm-0">
+            {% comment %} ?next={% url 'app:inicio' %} {% endcomment %}
               Salir
             </a>
           </div><!-- Boton login  modal-->

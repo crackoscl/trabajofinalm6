@@ -35,7 +35,8 @@
                                     <thead class="thead-inverse">
                                       <tr>
                                         <th>ID</th>
-                                        <th>Nombre y Apellido</th>
+                                        <th>Nombre </th>
+                                        <th>Apellido</th>
                                         <th>Rut</th>
                                         <th>Dirección</th>
                                         <th>Edad</th>
@@ -47,17 +48,18 @@
                                       {% for pacientes in lista_pacientes %}
                                        <tr>
                                           <td>{{ pacientes.id }}</td>
-                                          <td>{{ pacientes.nombre }}</td>
+                                          <td>{{ pacientes.first_name }}</td>
+                                           <td>{{ pacientes.last_name }}</td>
                                           <td>{{ pacientes.rut }}</td>
                                           <td>{{pacientes.direccion}}</td>
                                           <td>{{pacientes.edad }}</td>
                                           <td>{{pacientes.telefono}}</td>
-                                          <td>{{pacientes.fecha }}</td>
+                                          <td>{{pacientes.fecha_nacimiento }}</td>
                                           <td>
-                                            <a href="{% url 'app:editar_paciente_db' rut=pacientes.rut %}" class="btn btn-primary">Editar</a>
+                                            <a href="{% url 'app:editar_paciente_db' pk=pacientes.id %}" class="btn btn-primary">Editar</a>
                                           </td>
                                           <td>
-                                            <a href="{% url 'app:eliminar_pacientes_db' rut=pacientes.rut %}" class="btn btn-danger">Borrar</a>
+                                            <a href="{% url 'app:eliminar_pacientes_db' pk=pacientes.id %}" class="btn btn-danger">Borrar</a>
                                             
                                           </td>
                                           

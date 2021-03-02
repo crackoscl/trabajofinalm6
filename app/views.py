@@ -1,11 +1,12 @@
-from .models import Examenes, Perfil
+from .models import Examenes, User
+from django.contrib.auth.hashers import make_password
 from typing import ContextManager
 import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from .forms import  Examen, FormularioPacientes,Selectform
+from .forms import  Examen, FormularioPacientes
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -48,24 +49,25 @@ def inicio(request):
 
 @login_required(login_url="/login/")
 def private(request):
-    if request.method == "POST":
-        id_usuario = request.POST.get('usuarios')
-        perfiles = Perfil.objects.values()
-        print(perfiles)
-        for perfil in perfiles:
-            if int(perfil['id'] == int(id_usuario)):
-                usuario = perfil    
-        return render(request,'app/Privada.html',{"perfiluser": usuario,'perfiles':perfiles})
+    
+    # if request.method == "POST":
+        # id_usuario = request.POST.get('usuarios')
+        # perfiles = User.objects.values()
+    #     print(perfiles)
+    #     for perfil in perfiles:
+    #         if int(perfil['id'] == int(id_usuario)):
+    #             usuario = perfil    
+    #     return render(request,'app/Privada.html',{"perfiluser": usuario,'perfiles':perfiles})
         
             
-        return redirect('app:private') ### render post de usuario
+    #     return redirect('app:private') ### render post de usuario
    
-    elif request.method == "GET":
-        formulario = Selectform(request.GET)
-        perfiles = Perfil.objects.values()
-        perfilusuario = Perfil.objects.values()
-        context = {'formulario':formulario,'perfiles':perfiles,"perfiluser":perfilusuario}
-        return render(request,'app/Privada.html',context)
+    # elif request.method == "GET":
+    #     formulario = Selectform(request.GET)
+    perfiles = User.objects.values()
+    #     perfilusuario = User.objects.values()
+    context = {'perfiles':perfiles}
+    return render(request,'app/Privada.html',context)
    
     
 @login_required(login_url="/login/")
@@ -200,10 +202,10 @@ def eliminar_examen(request,pk):
 @login_required(login_url="/login/")
 def context_lista_pacientes():
     
-    pacientes = Perfil.objects.values()
+    pacientes = User.objects.values()
     context= {'lista_pacientes': pacientes}
-    print(context)
     return context
+
 
 @login_required(login_url="/login/")       
 def agregar_usuario_db(request):
@@ -211,10 +213,9 @@ def agregar_usuario_db(request):
     if request.method == 'GET':
         formulario = FormularioPacientes()
         context = {'formulario': formulario}
-        pacientes = Perfil.objects.all()
+        pacientes = User.objects.values()
         context={ 'formulario': formulario,
                  'lista_pacientes': pacientes}
-        print(context)
         return render(request,'app/agregar_usuario_db.html',context)
 
     elif request.method == 'POST':
@@ -225,15 +226,15 @@ def agregar_usuario_db(request):
         if formulario_devuelto.is_valid() == True:
             datos_formulario = formulario_devuelto.cleaned_data
             datos_formulario['fecha']= datos_formulario['fecha'].strftime("%Y-%m-%d")
-            Perfil.objects.create(
-                                  
-                                  nombre= datos_formulario['nombre'],
-                                  apellido = datos_formulario['apellido'],
-                                    correo= datos_formulario['correo'],
-                                    clave= datos_formulario['clave'],
+            User.objects.create_user(
+                                  username = datos_formulario['user_name'],
+                                  first_name = datos_formulario['nombre'],
+                                  last_name = datos_formulario['apellido'],
+                                    email= datos_formulario['email'],
+                                    password = datos_formulario['password'],
                                     rut= datos_formulario['rut'],
                                     edad = datos_formulario['edad'],
-                                    fecha = datos_formulario['fecha'],
+                                    fecha_nacimiento = datos_formulario['fecha_nacimiento'],
                                     direccion= datos_formulario['direccion'],
                                     ocupacion= datos_formulario['ocupacion'],
                                     telefono = datos_formulario['telefono'],
@@ -252,40 +253,36 @@ def agregar_usuario_db(request):
             return render(request, 'app/agregar_usuario_db.html', context)
         
 
-@login_required(login_url="/login/")  
-def eliminar_pacientes_db(request, rut):
-    
-    if request.method == 'GET':
-        context = {'rut': rut}
-        return render(request, 'app/eliminar_pacientes_db.html', context)
-    
-    if request.method == 'POST':
-        Perfil.objects.filter(rut = rut).delete()
-        
-        return redirect('app:agregar_usuario_db')
+
     
 @login_required(login_url="/login/")   
-def editar_paciente_db(request, rut):
+def editar_paciente_db(request, pk):
     
     if request.method == 'GET':
-        paciente= Perfil.objects.filter(rut = rut).values()[0]
+        paciente= User.objects.filter(pk = pk).values()[0]
+        print(paciente)
         
         formulario = FormularioPacientes(initial=paciente)
-        context = {'formulario':formulario, 'rut': rut}
+        context = {'formulario':formulario, 'pk': pk}
         return render( request, 'app/editar_paciente_db.html', context)
     
     elif request.method == 'POST':
+        
         formulario_devuelto = FormularioPacientes(request.POST)
+        print(formulario_devuelto)
         if formulario_devuelto.is_valid() == True:
             datos_formulario = formulario_devuelto.cleaned_data
-            datos_formulario['fecha']=datos_formulario['fecha'].strftime("%Y-%m-%d")
-            paciente = Perfil.objects.filter(rut=rut).update(
-                                    nombre= datos_formulario['nombre'],
-                                    correo= datos_formulario['correo'],
-                                    clave= datos_formulario['clave'],
+            datos_formulario['fecha_nacimiento']= datos_formulario['fecha_nacimiento'].strftime("%Y-%m-%d")
+            paciente = User.objects.filter(id=pk).update(
+                                    username = datos_formulario['username'],
+                                    first_name = datos_formulario['first_name'],
+                                    last_name = datos_formulario['last_name'],
+                                    email= datos_formulario['email'],
+                                    password = make_password(datos_formulario['password']),
+                                   
                                     rut= datos_formulario['rut'],
                                     edad = datos_formulario['edad'],
-                                    fecha = datos_formulario['fecha'],
+                                    fecha_nacimiento = datos_formulario['fecha_nacimiento'],
                                     direccion= datos_formulario['direccion'],
                                     ocupacion= datos_formulario['ocupacion'],
                                     telefono = datos_formulario['telefono'],
@@ -301,13 +298,13 @@ def editar_paciente_db(request, rut):
             return render ( request, 'app/editar_paciente_db.html', context)
         
 @login_required(login_url="/login/")       
-def eliminar_pacientes_db(request, rut):
+def eliminar_pacientes_db(request, pk):
     
     if request.method == 'GET':
-        context = {'rut': rut}
+        context = {'pk': pk}
         return render(request, 'app/eliminar_pacientes_db.html', context)
     
     if request.method == 'POST':
-        Perfil.objects.filter(rut = rut).delete()
+        User.objects.filter(id = pk).delete()
         
         return redirect('app:agregar_usuario_db')

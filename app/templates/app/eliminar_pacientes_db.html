@@ -25,9 +25,9 @@
                                     <thead class="thead-inverse">
                                       
                                       <tr>
-                                    <form action="{% url 'app:eliminar_pacientes_db' rut=rut %}" method="POST">
+                                    <form action="{% url 'app:eliminar_pacientes_db' pk=pk %}" method="POST">
                                       {% csrf_token %}
-                                      <h2>Está seguro de eliminar al paciente con numero de rut = {{rut}}?</h2>
+                                      <h2>Está seguro de eliminar al paciente con numero de  = {{pk.username}}?</h2>
                                       <input type="submit" value='Sí'>
                                       </tr>
                                     </thead>

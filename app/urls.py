@@ -16,6 +16,6 @@ urlpatterns = [
     path('graficos/', views.graficos,name='graficos'),  
     path('agendar/', views.agendar,name='agendar'),
     path('agregar_usuario_db/', views.agregar_usuario_db,name='agregar_usuario_db'),
-    path('<rut>/eliminar_pacientes_db', views.eliminar_pacientes_db, name='eliminar_pacientes_db'),
-    path('<rut>/editar_paciente_db', views.editar_paciente_db, name='editar_paciente_db'),
+    path('<pk>/eliminar_pacientes_db', views.eliminar_pacientes_db, name='eliminar_pacientes_db'),
+    path('<pk>/editar_paciente_db', views.editar_paciente_db, name='editar_paciente_db'),
 ]

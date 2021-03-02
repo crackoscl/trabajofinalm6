@@ -13,7 +13,7 @@
         {% block main %}
         <div class="col py-3">
             <div class="block-header">
-            {% include 'app/perfil_form.html' %}
+            {% comment %} {% include 'app/perfil_form.html' %} {% endcomment %}
                 {% if perfiluser %}
                     <h2>Perfil {{perfiluser.nombre}}</h2>
                 {% else %}

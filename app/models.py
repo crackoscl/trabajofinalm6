@@ -17,33 +17,12 @@ class User(AbstractUser):
     rol = models.CharField(max_length=50,default="sin asignar",blank=True)
     
     # add additional fields in here
-
-    def __str__(self):
-        return self.username
-    
-
-class Perfil(models.Model):
-    nombre = models.CharField(max_length=100)
-    apellido = models.CharField(max_length=100)
-    correo = models.EmailField(max_length=200)
-    clave = models.CharField(max_length=50, default='123456')
-    rut = models.CharField(max_length=10)
-    edad = models.IntegerField()
-    fecha = models.DateField()
-    direccion = models.CharField(max_length=150)
-    ocupacion = models.CharField(max_length=150, default='influencer')
-    telefono = models.CharField(max_length=20)
-    foto = models.CharField(max_length=65535, default='complete info')
-    resumen= models.TextField(default='complete la info')
-    educacion=models.TextField(default='complete la info')
-    historial = models.TextField(default='complete la info')
-    rol = models.CharField(max_length=50,default="sin asignar")
-    
     class Meta:
         ordering = ['id']
     
+
     def __str__(self):
-        return self.nombre
+        return self.username
     
     
 class Examenes(models.Model):

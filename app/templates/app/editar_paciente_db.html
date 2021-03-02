@@ -20,12 +20,10 @@
                     <div class="card">
                         <div class="body">
                             <div class="row">
-                                
                                 <table class="table">
                                     <thead class="thead-inverse">
-                                      
                                       <tr>
-                                    <form action="{% url 'app:editar_paciente_db' rut=rut %}" method="POST" novalidate>
+                                    <form action="{% url 'app:editar_paciente_db' pk=pk %}" method="POST" novalidate>
                                       {% csrf_token %}
                                       <table>
                                           {{formulario.as_table}}

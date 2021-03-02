@@ -29,13 +29,14 @@ class Examen(forms.Form):
     
 class FormularioPacientes(forms.Form):
     rol = forms.CharField()
-    nombre = forms.CharField(validators=[validators.MinLengthValidator(2,"Su Nombre debe poseer mas de 2 caracteres")])
-    apellido = forms.CharField(validators=[validators.MinLengthValidator(2,"Su Apellido debe poseer mas de 2 caracteres")])
-    correo =forms.EmailField()
-    clave = forms.CharField(label='Contraseña',required=False,widget = forms.PasswordInput())
+    username = forms.CharField(label='Nombre Usuario ',validators=[validators.MinLengthValidator(2,"Su UserName debe poseer mas de 2 caracteres")])
+    first_name  = forms.CharField(label='Nombre',validators=[validators.MinLengthValidator(2,"Su Nombre debe poseer mas de 2 caracteres")])
+    last_name = forms.CharField(label='Apellido',validators=[validators.MinLengthValidator(2,"Su Apellido debe poseer mas de 2 caracteres")])
+    email = forms.EmailField()
+    password = forms.CharField(label='Contraseña',required=False,widget = forms.PasswordInput())
     rut = forms.CharField()
     edad = forms.IntegerField()
-    fecha = forms.DateField()
+    fecha_nacimiento = forms.DateField()
     direccion = forms.CharField(label='Dirección')
     ocupacion = forms.CharField(label='Ocupación')
     telefono = forms.CharField(label='Telefono')
@@ -45,13 +46,14 @@ class FormularioPacientes(forms.Form):
     historial = forms.CharField(widget=forms.Textarea(attrs={'rows':3, 'cols':50}))
     
     rol.widget.attrs.update({'class': 'form-control'})
-    nombre.widget.attrs.update({'class': 'form-control'})
-    apellido.widget.attrs.update({'class': 'form-control'})
-    correo.widget.attrs.update({'class': 'form-control'})
-    clave.widget.attrs.update({'class': 'form-control'})
+    username.widget.attrs.update({'class': 'form-control'})
+    first_name.widget.attrs.update({'class': 'form-control'})
+    last_name.widget.attrs.update({'class': 'form-control'})
+    email.widget.attrs.update({'class': 'form-control'})
+    password.widget.attrs.update({'class': 'form-control'})
     rut.widget.attrs.update({'class': 'form-control'})
     edad.widget.attrs.update({'class': 'form-control'})
-    fecha.widget.attrs.update({'class': 'form-control'})
+    fecha_nacimiento.widget.attrs.update({'class': 'form-control'})
     foto.widget.attrs.update({'class': 'form-control'})
     resumen.widget.attrs.update({'class': 'form-control'})
     ocupacion.widget.attrs.update({'class': 'form-control'})
@@ -60,7 +62,4 @@ class FormularioPacientes(forms.Form):
     educacion.widget.attrs.update({'class': 'form-control'})
     historial.widget.attrs.update({'class': 'form-control'})
     
-   
-class Selectform(forms.Form):
-    Perfiles = forms.ChoiceField(label=False,required=False,widget=forms.Select(attrs={'class': 'form-control'}))
     
