@@ -41,11 +41,16 @@
              
           </ul>
           <!-- Boton login  modal-->
+          {% if user.is_authenticated %}
+          <div class="mr-3">
+            <span class="badge bg-success"> Usuario Activo: {{ user.username }}</span>
+        </div>
           <div class="text-center">
-            <a href="{% url 'app:inicio' %}" class="btn btn-danger border-dark font-weight-bold text-white my-2 my-sm-0">
+            <a href="{% url 'logout' %}?next={% url 'app:inicio' %}" class="btn btn-danger border-dark font-weight-bold text-white my-2 my-sm-0">
               Salir
             </a>
           </div><!-- Boton login  modal-->
+          {% endif %}
           
         <!-- Navigation Links -->
       </nav>

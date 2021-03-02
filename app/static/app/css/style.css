@@ -228,3 +228,8 @@ h1 {text-align: center;
 #modalLoginForm{
   color: #000000;
 }
+
+.badge{
+  font-size: 1em;
+  color: #ffffff;
+}

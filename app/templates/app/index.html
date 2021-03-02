@@ -225,7 +225,8 @@
             </button>
           </div>
 
-           <form action="{% url 'app:login' %}" method="POST" novalidate >
+          {% include 'registration/login.html' %}
+          {% comment %} <form action="{% url 'app:login' %}" method="POST" novalidate >
            {% csrf_token %}
           <div class="modal-body mx-3">
                {{formulario.as_table}}
@@ -234,7 +235,7 @@
           <div class="modal-footer d-flex justify-content-center">
             <button type="submit" class="btn btn-primary">Login</button>
           </div>
-           </form>
+           </form> {% endcomment %}
         </div>
       </div>
     </div>

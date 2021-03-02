@@ -1,37 +1,36 @@
 
 from django import forms
 from django.core import validators
-from .models import Pacientes
+from .models import User
 
-   
-class Login(forms.Form):
+# class Login(forms.Form):
      
-    correo = forms.EmailField(required=False)
-    clave = forms.CharField(label='Contraseña',required=False,widget = forms.PasswordInput())
+#     correo = forms.EmailField(required=False)
+#     clave = forms.CharField(label='Contraseña',required=False,widget = forms.PasswordInput())
    
-    correo.widget.attrs.update({'class': 'form-control'})
-    clave.widget.attrs.update({'class': 'form-control'})
+#     correo.widget.attrs.update({'class': 'form-control'})
+#     clave.widget.attrs.update({'class': 'form-control'})
     
     
 class Examen(forms.Form):
     
-    paciente = forms.ModelChoiceField(queryset=Pacientes.objects.all())
+    perfil = forms.ModelChoiceField(queryset=User.objects.all())
     nombre = forms.CharField(label="Nombre Examen")
     valor = forms.CharField(label="valor")
     fecha = forms.DateField(label='Fecha de examen:', widget=forms.SelectDateWidget(years=range(1900,2022)))
     observaciones = forms.CharField(widget=forms.Textarea(attrs={'rows':3, 'cols':20}))
     
-    paciente.widget.attrs.update({'class': 'form-control'})
+    perfil.widget.attrs.update({'class': 'form-control'})
     nombre.widget.attrs.update({'class': 'form-control'})
     valor.widget.attrs.update({'class': 'form-control'})
     fecha.widget.attrs.update({'class': 'form-control'})
     observaciones.widget.attrs.update({'class': 'form-control'})
 
-
-    
     
 class FormularioPacientes(forms.Form):
-    nombre = forms.CharField(validators=[validators.MinLengthValidator(2,"Su nombre debe poseer mas de 2 caracteres")])
+    rol = forms.CharField()
+    nombre = forms.CharField(validators=[validators.MinLengthValidator(2,"Su Nombre debe poseer mas de 2 caracteres")])
+    apellido = forms.CharField(validators=[validators.MinLengthValidator(2,"Su Apellido debe poseer mas de 2 caracteres")])
     correo =forms.EmailField()
     clave = forms.CharField(label='Contraseña',required=False,widget = forms.PasswordInput())
     rut = forms.CharField()
@@ -45,8 +44,9 @@ class FormularioPacientes(forms.Form):
     educacion = forms.CharField(widget=forms.Textarea(attrs={'rows':3, 'cols':50}))
     historial = forms.CharField(widget=forms.Textarea(attrs={'rows':3, 'cols':50}))
     
-    
+    rol.widget.attrs.update({'class': 'form-control'})
     nombre.widget.attrs.update({'class': 'form-control'})
+    apellido.widget.attrs.update({'class': 'form-control'})
     correo.widget.attrs.update({'class': 'form-control'})
     clave.widget.attrs.update({'class': 'form-control'})
     rut.widget.attrs.update({'class': 'form-control'})

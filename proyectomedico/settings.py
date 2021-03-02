@@ -118,6 +118,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+AUTH_USER_MODEL = 'app.User'
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = 'app:private'
+LOGOUT_REDIRECT_URL = 'app:inicio'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

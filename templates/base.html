@@ -62,9 +62,10 @@
           </ul>
           <!-- Boton login  modal-->
           <div class="text-center">
-            <button class="btn btn-outline-success border-dark font-weight-bold text-white my-2 my-sm-0" href="#" data-toggle="modal" data-target="#modalLoginForm">
+            {% comment %} <button  class="btn btn-outline-success border-dark font-weight-bold text-white my-2 my-sm-0" href="#" data-toggle="modal" data-target="#modalLoginForm">
               Login
-            </button>
+            </button> {% endcomment %}
+            <a id="loginAnchor" class="btn btn-outline-success border-dark font-weight-bold text-white my-2 my-sm-0" data-toggle="modal" href="{% url 'login' %}" data-target="#modalLoginForm">Login</a></li>
           </div><!-- Boton login  modal-->
           
         <!-- Navigation Links -->

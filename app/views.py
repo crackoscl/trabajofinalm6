@@ -1,55 +1,57 @@
-from .models import Examenes, Administradores, Pacientes
+from .models import Examenes, Perfil
 from typing import ContextManager
 import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from .forms import Login, Examen, FormularioPacientes,Selectform
+from .forms import  Examen, FormularioPacientes,Selectform
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-def buscar(correo,clave,administradores, pacientes):
-    for item in administradores:
-        print("Estos son los campos obtenidos de administradores", item)
-        if item['correo'] == correo and item['clave'] == clave:
-            return True
+# def buscar(correo,clave,administradores, pacientes):
+#     for item in administradores:
+#         print("Estos son los campos obtenidos de administradores", item)
+#         if item['correo'] == correo and item['clave'] == clave:
+#             return True
         
-    for item in pacientes:
-        print("Estos son los campos obtenidos de pacientes", item)
-        if item['correo'] == correo and item['clave'] == clave:
-            return True
+#     for item in pacientes:
+#         print("Estos son los campos obtenidos de pacientes", item)
+#         if item['correo'] == correo and item['clave'] == clave:
+#             return True
     
 def inicio(request):
-    if request.method == "GET":
-        formulario = Login(request.GET)
-        context = {'formulario':formulario}
-    return render(request,'app/index.html',context)
+    # if request.method == "GET":
+    #     formulario = Login(request.GET)
+    #     context = {'formulario':formulario}
+    return render(request,'app/index.html')
 
-def login_user(request):
-    if request.method == "POST":
-        formulario_lleno = Login(request.POST)
-        if formulario_lleno.is_valid() == True:
+# def login_user(request):
+#     if request.method == "POST":
+#         formulario_lleno = Login(request.POST)
+#         if formulario_lleno.is_valid() == True:
             
-            data = formulario_lleno.cleaned_data
-            pacient = Pacientes.objects.values()
-            admins = Administradores.objects.values()
-            validar = buscar(data['correo'],data['clave'],admins, pacient)
-            if validar == True:
-                return redirect('app:private')
-            else:
-                formulario_lleno = Login()
-                return redirect('app:inicio')               
-        else:
-            formulario_lleno = Login()
-            return redirect('app:inicio')
+#             data = formulario_lleno.cleaned_data
+#             pacient = Pacientes.objects.values()
+#             admins = Administradores.objects.values()
+#             validar = buscar(data['correo'],data['clave'],admins, pacient)
+#             if validar == True:
+#                 return redirect('app:private')
+#             else:
+#                 formulario_lleno = Login()
+#                 return redirect('app:inicio')               
+#         else:
+#             formulario_lleno = Login()
+#             return redirect('app:inicio')
 
 
-
+@login_required(login_url="/login/")
 def private(request):
     if request.method == "POST":
         id_usuario = request.POST.get('usuarios')
-        perfiles = Pacientes.objects.values()
+        perfiles = Perfil.objects.values()
+        print(perfiles)
         for perfil in perfiles:
             if int(perfil['id'] == int(id_usuario)):
                 usuario = perfil    
@@ -60,13 +62,13 @@ def private(request):
    
     elif request.method == "GET":
         formulario = Selectform(request.GET)
-        perfiles = reversed(Pacientes.objects.values())
-        perfilusuario = Pacientes.objects.values()
-        context = {'formulario':formulario,'perfiles':perfiles,"perfiluser":perfilusuario[4]}
+        perfiles = Perfil.objects.values()
+        perfilusuario = Perfil.objects.values()
+        context = {'formulario':formulario,'perfiles':perfiles,"perfiluser":perfilusuario}
         return render(request,'app/Privada.html',context)
    
     
-                
+@login_required(login_url="/login/")
 def graficos(request):
     
     datos = {}
@@ -100,16 +102,17 @@ def graficos(request):
     return render(request,'app/Graficos.html', {'labels_glucosa':fecha_glucosa, 'labels_orina':fecha_orina, 'labels_hemograma':fecha_hemograma,'data':datos})
 
 
-
+@login_required(login_url="/login/")
 def agendar(request):
     return render(request,'app/Agendar.html')
 
+@login_required(login_url="/login/")
 def listar_examenes(request):
         examenes = Examenes.objects.all()
         context = {"lista_examenes": examenes}
         return render(request,'app/examenes/Examenes.html',context)
 
-
+@login_required(login_url="/login/")
 def crear_examen(request):
     data = dict() # pa meter cosas 
     
@@ -118,12 +121,13 @@ def crear_examen(request):
         if formulario.is_valid():
             datos_formulario = formulario.cleaned_data
             datos_formulario['fecha'] = datos_formulario['fecha'].strftime("%Y-%m-%d")
+            print(datos_formulario)
             Examenes.objects.create(
                 nombre = datos_formulario['nombre'],
                 valor = datos_formulario['valor'],
                 fecha = datos_formulario['fecha'],
                 observaciones = datos_formulario['observaciones'],
-                paciente = datos_formulario['paciente']
+                paciente = datos_formulario['perfil']
             )
             data['formulario_is_valid'] = True
             examenes = Examenes.objects.all()
@@ -142,7 +146,7 @@ def crear_examen(request):
     return JsonResponse(data)
 
 
-
+@login_required(login_url="/login/")
 def editar_examen(request,pk):
     data = dict() # pa meter cosas 
     if request.method == 'POST':
@@ -155,7 +159,7 @@ def editar_examen(request,pk):
                 valor = datos_formulario['valor'],
                 fecha = datos_formulario['fecha'],
                 observaciones = datos_formulario['observaciones'],
-                paciente = datos_formulario['paciente']
+                paciente = datos_formulario['perfil']
             )
             data['formulario_is_valid'] = True
             examenes = Examenes.objects.all()
@@ -173,7 +177,7 @@ def editar_examen(request,pk):
                                                request = request,)
     return JsonResponse(data)
 
-
+@login_required(login_url="/login/")
 def eliminar_examen(request,pk):
     examen = get_object_or_404(Examenes, pk=pk)
     data = dict()
@@ -193,21 +197,21 @@ def eliminar_examen(request,pk):
     return JsonResponse(data)
             
 
-
+@login_required(login_url="/login/")
 def context_lista_pacientes():
     
-    pacientes = Pacientes.objects.values()
+    pacientes = Perfil.objects.values()
     context= {'lista_pacientes': pacientes}
     print(context)
     return context
 
-            
+@login_required(login_url="/login/")       
 def agregar_usuario_db(request):
     
     if request.method == 'GET':
         formulario = FormularioPacientes()
         context = {'formulario': formulario}
-        pacientes = Pacientes.objects.all()
+        pacientes = Perfil.objects.all()
         context={ 'formulario': formulario,
                  'lista_pacientes': pacientes}
         print(context)
@@ -221,8 +225,10 @@ def agregar_usuario_db(request):
         if formulario_devuelto.is_valid() == True:
             datos_formulario = formulario_devuelto.cleaned_data
             datos_formulario['fecha']= datos_formulario['fecha'].strftime("%Y-%m-%d")
-            
-            Pacientes.objects.create(nombre= datos_formulario['nombre'],
+            Perfil.objects.create(
+                                  
+                                  nombre= datos_formulario['nombre'],
+                                  apellido = datos_formulario['apellido'],
                                     correo= datos_formulario['correo'],
                                     clave= datos_formulario['clave'],
                                     rut= datos_formulario['rut'],
@@ -235,7 +241,7 @@ def agregar_usuario_db(request):
                                     resumen= datos_formulario['resumen'],
                                     educacion = datos_formulario['educacion'],
                                     historial = datos_formulario['historial'],
-                                
+                                    rol = datos_formulario['rol']
                                     )
                 
             return redirect('app:agregar_usuario_db')
@@ -246,7 +252,7 @@ def agregar_usuario_db(request):
             return render(request, 'app/agregar_usuario_db.html', context)
         
 
-    
+@login_required(login_url="/login/")  
 def eliminar_pacientes_db(request, rut):
     
     if request.method == 'GET':
@@ -254,15 +260,15 @@ def eliminar_pacientes_db(request, rut):
         return render(request, 'app/eliminar_pacientes_db.html', context)
     
     if request.method == 'POST':
-        Pacientes.objects.filter(rut = rut).delete()
+        Perfil.objects.filter(rut = rut).delete()
         
         return redirect('app:agregar_usuario_db')
     
-    
+@login_required(login_url="/login/")   
 def editar_paciente_db(request, rut):
     
     if request.method == 'GET':
-        paciente= Pacientes.objects.filter(rut = rut).values()[0]
+        paciente= Perfil.objects.filter(rut = rut).values()[0]
         
         formulario = FormularioPacientes(initial=paciente)
         context = {'formulario':formulario, 'rut': rut}
@@ -273,7 +279,7 @@ def editar_paciente_db(request, rut):
         if formulario_devuelto.is_valid() == True:
             datos_formulario = formulario_devuelto.cleaned_data
             datos_formulario['fecha']=datos_formulario['fecha'].strftime("%Y-%m-%d")
-            paciente = Pacientes.objects.filter(rut=rut).update(
+            paciente = Perfil.objects.filter(rut=rut).update(
                                     nombre= datos_formulario['nombre'],
                                     correo= datos_formulario['correo'],
                                     clave= datos_formulario['clave'],
@@ -286,14 +292,15 @@ def editar_paciente_db(request, rut):
                                     foto = datos_formulario['foto'],
                                     resumen= datos_formulario['resumen'],
                                     educacion = datos_formulario['educacion'],
-                                    historial = datos_formulario['historial']
+                                    historial = datos_formulario['historial'],
+                                    rol = datos_formulario['rol']
                                     )
             return redirect('app:agregar_usuario_db')
         else:
             context = {'formulario': formulario_devuelto}
             return render ( request, 'app/editar_paciente_db.html', context)
         
-        
+@login_required(login_url="/login/")       
 def eliminar_pacientes_db(request, rut):
     
     if request.method == 'GET':
@@ -301,6 +308,6 @@ def eliminar_pacientes_db(request, rut):
         return render(request, 'app/eliminar_pacientes_db.html', context)
     
     if request.method == 'POST':
-        Pacientes.objects.filter(rut = rut).delete()
+        Perfil.objects.filter(rut = rut).delete()
         
         return redirect('app:agregar_usuario_db')

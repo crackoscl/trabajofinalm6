@@ -7,7 +7,7 @@ app_name = 'app'
 
 urlpatterns = [
     path('', views.inicio,name='inicio'),
-    path('login/',views.login_user,name='login'),
+   # path('login/',views.login_user,name='login'),
     path('private/', views.private,name='private'),
     path('examenes/', views.listar_examenes,name='examenes'),
     path('crearexamen/', views.crear_examen,name='crearexamen'),
