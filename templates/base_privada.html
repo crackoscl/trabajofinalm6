@@ -42,7 +42,13 @@
           </ul>
           <!-- Boton login  modal-->
           <div class="text-center">
-            <a href="{% url 'app:inicio' %}" class="btn btn-danger border-dark font-weight-bold text-white my-2 my-sm-0">
+            {% if user.is_authenticated %}
+                <a class="btn btn-warning border-dark font-weight-bold text-white my-2 my-sm-0">Rol en la aplicación :{{ user.perfil.rol }}</a>
+                <a class="btn btn-warning border-dark font-weight-bold text-white my-2 my-sm-0">Usuario :{{ user.username }}</a>
+            {% endif %}
+          </div>
+          <div class="text-center">
+            <a href="{% url 'logout' %}?next={% url 'app:inicio' %}" class="btn btn-danger border-dark font-weight-bold text-white my-2 my-sm-0">
               Salir
             </a>
           </div><!-- Boton login  modal-->
@@ -69,7 +75,7 @@
                     Perfil
                 </a>
                 <a href="{% url 'app:examenes' %}" class="bg-dark list-group-item list-group-item-action">
-                   
+                
                     <img class="iconos" src="{% static 'app/img/medicina.png' %}">
                     examenes
                 </a>

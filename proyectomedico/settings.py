@@ -79,7 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'proyectomedico',
         'USER': 'postgres',
-        'PASSWORD': 'Lagox69',
+        'PASSWORD': '123',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -123,3 +123,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = 'app:private'
