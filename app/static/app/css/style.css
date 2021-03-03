@@ -233,3 +233,8 @@ h1 {text-align: center;
   font-size: 1em;
   color: #ffffff;
 }
+
+.login{
+  margin-top: 80px;
+  padding:100px;
+}

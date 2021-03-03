@@ -43,7 +43,7 @@
           <!-- Boton login  modal-->
           {% if user.is_authenticated %}
           <div class="mr-3">
-            <span class="badge bg-success"> Usuario Activo: {{ user.username }}</span>
+            <span class="badge bg-success"> Usuario Activo : {{ user.username }} - {{user.rol}}</span>
         </div>
           <div class="text-center">
             <a href="{% url 'logout' %}" class="btn btn-danger border-dark font-weight-bold text-white my-2 my-sm-0">

@@ -5,7 +5,7 @@ from .models import User
     
 class Examen(forms.Form):
     
-    perfil = forms.ModelChoiceField(queryset=User.objects.all())
+    perfil = forms.ModelChoiceField(queryset=User.objects.all().exclude(is_superuser=True))
     nombre = forms.CharField(label="Nombre Examen")
     valor = forms.CharField(label="valor")
     fecha = forms.DateField(label='Fecha de examen:', widget=forms.SelectDateWidget(years=range(1900,2022)))

@@ -3,7 +3,7 @@
 {% load static %}
 
       
-      {%block jumbotron%}
+      {%block jumbotron %}
 
       <div class="container-fluid bg-principal" id="principal">
         <div class="row">
@@ -16,7 +16,7 @@
         </div>
       </div>
       <!-- End Section: Principal -->
-      {% endblock jumbotron%}
+      {% endblock jumbotron %}
 
     {% block noticias %}
       <!-- Section: Noticia -->
@@ -210,38 +210,6 @@
         <p class="text-muted">Grupo Full Stack Python</p>
       </footer>
     {% endblock footer %}
-
-         <!-- Login -->
-     {% block login %}
-
-    
-     <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header text-center">
-            <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-
-          {% include 'registration/login.html' %}
-          {% comment %} <form action="{% url 'app:login' %}" method="POST" novalidate >
-           {% csrf_token %}
-          <div class="modal-body mx-3">
-               {{formulario.as_table}}
-
-          </div>
-          <div class="modal-footer d-flex justify-content-center">
-            <button type="submit" class="btn btn-primary">Login</button>
-          </div>
-           </form> {% endcomment %}
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endblock login %}
-
 
   {% block script %}
   

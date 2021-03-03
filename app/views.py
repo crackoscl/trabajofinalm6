@@ -10,22 +10,31 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from .forms import  Examen, FormularioPacientes
 
+
+    
     
 def inicio(request):
-    # if request.method == "GET":
-    #     formulario = Login(request.GET)
-    #     context = {'formulario':formulario}
     return render(request,'app/index.html')
 
 
+def funcion_permiso_medico_paciente(user):
+    if user.rol == 'Paciente' or user.rol == 'Medico':
+        return user.rol 
+
+def funcion_permiso_medico(user):
+    return user.rol == 'Medico'
+
+
 @login_required(login_url="/login/")
+@user_passes_test(funcion_permiso_medico_paciente) #Login Medico Paciente
 def private(request):
     perfiles = User.objects.values()
     context = {'perfiles':perfiles}
     return render(request,'app/Privada.html',context)
    
-    
+
 @login_required(login_url="/login/")
+@user_passes_test(funcion_permiso_medico_paciente) #Login Medico Paciente
 def graficos(request):
     datos = {}
     glucosa = []
@@ -59,22 +68,23 @@ def graficos(request):
 
 
 @login_required(login_url="/login/")
+@user_passes_test(funcion_permiso_medico_paciente) #Login Medico Paciente
 def agendar(request):
     return render(request,'app/Agendar.html')
 
 
 
-def funcion_permiso(user):
-    return user.rol == 'paciente'
 
 @login_required(login_url="/login/")
-@user_passes_test(funcion_permiso) 
+@user_passes_test(funcion_permiso_medico_paciente) 
 def listar_examenes(request):
         examenes = Examenes.objects.all()
         context = {"lista_examenes": examenes}
         return render(request,'app/examenes/Examenes.html',context)
+    
 
 @login_required(login_url="/login/")
+@user_passes_test(funcion_permiso_medico) #Login Medico 
 def crear_examen(request):
     data = dict() # pa meter cosas 
     
@@ -109,6 +119,7 @@ def crear_examen(request):
 
 
 @login_required(login_url="/login/")
+@user_passes_test(funcion_permiso_medico) #Login Medico 
 def editar_examen(request,pk):
     data = dict() # pa meter cosas 
     if request.method == 'POST':
@@ -140,6 +151,7 @@ def editar_examen(request,pk):
     return JsonResponse(data)
 
 @login_required(login_url="/login/")
+@user_passes_test(funcion_permiso_medico) #Login Medico 
 def eliminar_examen(request,pk):
     examen = get_object_or_404(Examenes, pk=pk)
     data = dict()
@@ -159,26 +171,14 @@ def eliminar_examen(request,pk):
     return JsonResponse(data)
             
 
-@login_required(login_url="/login/")
-def context_lista_pacientes():
-    
-    pacientes = User.objects.values()
-    context= {'lista_pacientes': pacientes}
-    return context
-
-
-
-# def funcion_permiso(user):
-#     return user.rol == 'medico'
-
 @login_required(login_url="/login/")  
-#@user_passes_test(funcion_permiso)     
+@user_passes_test(funcion_permiso_medico) #Login Medico 
 def agregar_usuario_db(request):
     
     if request.method == 'GET':
         formulario = FormularioPacientes()
         context = {'formulario': formulario}
-        pacientes = User.objects.values()
+        pacientes = User.objects.all().exclude(is_superuser=True)
         context={ 'formulario': formulario,
                  'lista_pacientes': pacientes}
         return render(request,'app/agregar_usuario_db.html',context)
@@ -213,14 +213,13 @@ def agregar_usuario_db(request):
             return redirect('app:agregar_usuario_db')
              
         else:
-            context= {'formulario': formulario_devuelto}
-            context.update(context_lista_pacientes())
-            return render(request, 'app/agregar_usuario_db.html', context)
+            pacientes = User.objects.all().exclude(is_superuser=True)
+            return render(request, 'app/agregar_usuario_db.html',{'formulario': formulario_devuelto,'lista_pacientes': pacientes})
         
-
 
     
 @login_required(login_url="/login/")   
+@user_passes_test(funcion_permiso_medico) #Login Medico 
 def editar_paciente_db(request, pk):
     
     if request.method == 'GET':
@@ -261,7 +260,8 @@ def editar_paciente_db(request, pk):
             context = {'formulario': formulario_devuelto}
             return render ( request, 'app/editar_paciente_db.html', context)
         
-@login_required(login_url="/login/")       
+@login_required(login_url="/login/")    
+@user_passes_test(funcion_permiso_medico) #Login Medico 
 def eliminar_pacientes_db(request, pk):
     
     if request.method == 'GET':
