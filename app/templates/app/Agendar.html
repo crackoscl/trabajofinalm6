@@ -1,8 +1,11 @@
 {% extends "base_privada.html" %}
 {% load static %}
 
+
         {% block imagenperfil %}
-            <img class="img-fluid rounded" src="{% static 'app/img/profe luis.jpg' %}">
+         {% if user.is_authenticated %}
+            <img class="img-fluid rounded" src="{{user.foto}}">
+            {% endif %}
         {% endblock imagenperfil %}
 
         <!-- MAIN -->

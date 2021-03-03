@@ -3,8 +3,10 @@
 {% load static %}
 
 
-        {% block imagenperfil %}
-            <img class="img-fluid rounded" src="{% static 'app/img/profe luis.jpg' %}">
+      {% block imagenperfil %}
+         {% if user.is_authenticated %}
+            <img class="img-fluid rounded" src="{{user.foto}}">
+            {% endif %}
         {% endblock imagenperfil %}
 
         <!-- MAIN -->

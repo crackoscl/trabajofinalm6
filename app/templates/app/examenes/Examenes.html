@@ -3,8 +3,10 @@
 {% load static %}
 
 
-        {% block imagenperfil %}
-            <img class="img-fluid rounded" src="{% static 'app/img/profe luis.jpg' %}">
+       {% block imagenperfil %}
+         {% if user.is_authenticated %}
+            <img class="img-fluid rounded" src="{{user.foto}}">
+            {% endif %}
         {% endblock imagenperfil %}
 
         <!-- MAIN -->
@@ -21,9 +23,33 @@
                     <div class="card">
                         <div class="body">
                             <div class="row">
-                                <button type="button" id="boton-js" class="btn btn-info mb-4"   data-toggle="modal" data-target="#form" data-url="{% url 'app:crearexamen' %}">
-                                    Ingresar Examen
-                                </button>  
+                                 {% if user.is_authenticated %}
+                                  {% if user.rol == 'Paciente' %}
+                            
+                                <table class="table" id="tabla-datos">
+                                    <thead class="thead-inverse">
+                                      <tr>
+                                        <th>#</th>
+                                        <th>Nombre</th>
+                                        <th>Valor</th>
+                                        <th>Observaciones</th>
+                                        <th>Fecha</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                          {% include 'app/examenes/Examenes_lista_parcial_paciente.html' %}
+                                    </tbody>
+                                  </table>
+
+                                     {% else %}
+
+                                     <button type="button" id="boton-js" class="btn btn-info mb-4"   data-toggle="modal" data-target="#form" data-url="{% url 'app:crearexamen' %}">
+                                          Ingresar Examen
+                                      </button>  
+                            
                                 <table class="table" id="tabla-datos">
                                     <thead class="thead-inverse">
                                       <tr>
@@ -41,7 +67,9 @@
                                           {% include 'app/examenes/Examenes_lista_parcial.html' %}
                                     </tbody>
                                   </table>
-                            </div>
+                                  {%endif%}
+                                  {%endif%}
+                                </div>
                         </div>
                     
                           <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

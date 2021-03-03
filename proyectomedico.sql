@@ -488,6 +488,28 @@ ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('p
 
 COPY public.app_examenes (id, nombre, valor, fecha, observaciones, paciente_id) FROM stdin;
 4	glucosa	500	1935-01-01	r43r 4v r34r 43 r2	7
+5	glucosa	350	1992-01-01	glucosa un poco alta	10
+6	orina	160	1956-01-01	orina clara	10
+9	hemograma	350	1900-01-01	djewdjkñjewdjkwe	10
+7	hemograma	500	2019-08-11	recuento de leucositos normal	10
+8	hemograma	500	1900-10-28	hkh fksdhfjkhs fkhks dhflk ah	10
+10	orina	350	2007-12-01	orina turbia bacterias	10
+12	glucosa	160	1900-01-01	djdljslañdj	12
+13	glucosa	500	1912-01-01	iuiuyiuy	10
+14	glucosa	160	1900-01-01	hjkhl hjk hkh l	10
+15	glucosa	500	1900-01-01	hjkhljl	10
+16	hemograma	500	1920-01-01	wdw ed ed weq dwe d	10
+17	hemograma	500	1945-01-01	jdh hdsfkhds kfjhlds	10
+18	hemograma	500	1903-01-01	dwedwed	10
+19	orina	500	1900-01-01	udh ewudh iwedho q	10
+20	glucosa	250	1905-01-01	dewdqwed	10
+21	glucosa	350	1900-01-01	e3e23e1e	10
+23	orina	160	1900-01-01	defrf rferf	12
+26	orina	500	1950-01-01	hhjkdh deh kjwe dlkjw	12
+27	glucosa	250	1950-01-01	ed ewdhewhepdkhwkje hdjkhwqedkh kl	12
+28	glucosa	500	1921-01-01	ewqeqweqw	10
+29	glucosa	160	1900-01-01	32e23e32e23e32	12
+30	hemograma	500	1900-01-01	grgrgr	10
 \.
 
 
@@ -496,12 +518,10 @@ COPY public.app_examenes (id, nombre, valor, fecha, observaciones, paciente_id) 
 --
 
 COPY public.app_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined, rut, edad, fecha_nacimiento, direccion, ocupacion, foto, telefono, resumen, educacion, historial, rol) FROM stdin;
-10	pbkdf2_sha256$216000$2v6ZklHGWETB$dXxvUGFDhgLM9AzBwUHf97SlHhfD54Jj12yaX54alf8=	2021-03-02 21:27:45.300642-03	f	jona12	jonathan	lopez	jona@gmail.com	f	t	2021-03-02 20:39:29-03	1500698-2	100	2021-03-02	las carmelitas valpo	redes y python master	https://media-exp1.licdn.com/dms/image/C5603AQH2_0aQAqfJPA/profile-displayphoto-shrink_200_200/0/1517395160883?e=1619654400&v=beta&t=Uy_blZEEfmdETNKayjOjnP_VZ9stM4L9C-XE5Ngd1Yw	5698406646	dwdhkjwh	dwdwqd	dwedwdqw	paciente
-9	pbkdf2_sha256$216000$oLXyPHZx5uNj$5/0Jo1q8Ym3x2pBpx8YZj6/XV9LJrGeMP0vZEQ2EEdY=	2021-03-02 21:42:12.565657-03	f	pedrito	pedro	lopez	plopez@gmail.com	f	t	2021-03-02 20:33:46.508714-03	16798721-2	100	2021-03-02	Santiago #45450	Telecommunication Specialist	http://yofui.com/CLFotosFiles/Evento00000866/YoFui0000000400844604-6.JPG	9405653554	hkjhkje djwkwpjhedkjwhe djwedjkhkwe	dwjdlkj dweldlkjwe dlkwjdekljwe dwejed wkej dl	dewhdkjwpe dwewpjhd whdjkhwe djhwwhepjdkh kjdhwk	paciente
-8	pbkdf2_sha256$216000$c4eFcAstkPS8$9ubunk1IPXvD58WZppfzvrP3H83mfH/qIfRa6pFG0R8=	2021-03-02 21:50:09.772001-03	t	crackoscl				t	t	2021-03-02 15:47:47.436113-03		\N	\N		influencer	complete info		complete la info	complete la info	complete la info	sin asignar
-11	pbkdf2_sha256$216000$shx6SJAQte2X$w33eb7UbA7sgpIG7/RWlGhpk0QqZ7MamVJfyA1cpkZM=	\N	f	esteban12	esteban	pikau	esteban@gmail.com	f	t	2021-03-02 21:49:57.101829-03	20380930-2	100	2021-03-02	Santiago #45450	redes y python master	https://media-exp1.licdn.com/dms/image/C5603AQEjGwKBiXp4Cg/profile-displayphoto-shrink_200_200/0/1607380799059?e=1619654400&v=beta&t=o6OpLNmhSvNVQhWAmccfJFOo3CebcjHF-e6UfkA1AAU	9405653554	dewhdkhwe dkjwe	dehdkh dhjwhd jh kd	dweldkh hdkwed jkh k	Cuidador_Autorizado
-7	NGU8ft6URhgLaPC	\N	f	jona	juantito	dwdwqd	juaninto@lol.com	f	t	2021-03-02 12:27:23.038286-03	15896752-2	100	2020-12-05	las carmelitas valpo	redes y python master	https://www.awakelab.cl/wp-content/uploads/2020/12/Jonathan.jpg	9405653554	dew dew dwe d	d wqedwed we d	dw dw dqw dwe	medico
-2	pbkdf2_sha256$216000$DDtL6eAWNfKz$YlHk0trUq7c58Sgaauqk8lxhWK9ujYbq61mbzvRinS4=	2021-03-02 15:28:22.551065-03	t	paralele	juantito	dwdwqd	juanito@lol.com	t	t	2021-03-02 09:46:09-03	15896752-2	100	2020-12-05	las carmelitas valpo	influencer	complete info	9405653554	complete la info	complete la info	complete la info	sin asignar
+10	pbkdf2_sha256$216000$XrNlvhQtoznR$+jBb4NGUV7RqXBu9T9s9r/wgGORV2oeDVtA9YWyZhW8=	2021-03-03 18:41:45.361102-03	f	jona12	jonathan	lopez	jona@gmail.com	f	t	2021-03-02 20:39:29-03	1500698-2	100	2021-03-02	las carmelitas valpo	redes y python master	https://media-exp1.licdn.com/dms/image/C5603AQH2_0aQAqfJPA/profile-displayphoto-shrink_200_200/0/1517395160883?e=1619654400&v=beta&t=Uy_blZEEfmdETNKayjOjnP_VZ9stM4L9C-XE5Ngd1Yw	5698406646	dwdhkjwh	dwdwqd	dwedwdqw	Paciente
+12	pbkdf2_sha256$216000$LjV7c0rMeuDF$F1CdJif0NzuItwpYNDZi0/9wQkHLD+W/Bgimut7tIMQ=	2021-03-03 18:43:18.747656-03	f	pedrito	pedro	lopez	pedrito@gmail.com	f	t	2021-03-03 14:22:34.084707-03	20380930-2	36	2021-03-01	las cabras #3500	Telecommunication Specialist	https://www.awakelab.cl/wp-content/uploads/2020/12/Jonathan.jpg	5698406646	dwjd eljdlkjewlplde jewl djw lejed l	dwjdñwjkdjkejdekj ljd lwjweldkjlkwejd l	dewdjljwe djlkweld wje djlkwedjkwje	Paciente
+8	pbkdf2_sha256$216000$c4eFcAstkPS8$9ubunk1IPXvD58WZppfzvrP3H83mfH/qIfRa6pFG0R8=	2021-03-03 18:44:01.353533-03	t	crackoscl				t	t	2021-03-02 15:47:47.436113-03		\N	\N		influencer	complete info		complete la info	complete la info	complete la info	sin asignar
+7	pbkdf2_sha256$216000$6NhcwR3r3vij$mxUxtM3yr378yqcKC9Wd3CeAerufn1IizTsw+7nVn7w=	2021-03-03 18:44:48.409406-03	f	jona	juantito	dwdwqd	juaninto@lol.com	f	t	2021-03-02 12:27:23.038286-03	15896752-2	100	2020-12-05	las carmelitas valpo	redes y python master	https://www.awakelab.cl/wp-content/uploads/2020/12/Jonathan.jpg	9405653554	dew dew dwe d	d wqedwed we d	dw dw dqw dwe	Medico
 \.
 
 
@@ -578,13 +598,11 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 --
 
 COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
-2	2021-03-02 09:47:20.252967-03	3	juanito	1	[{"added": {}}]	4	2
-3	2021-03-02 09:47:47.47971-03	2	lol	2	[{"changed": {"fields": ["Rut", "Edad", "Fecha nacimiento"]}}]	4	2
-4	2021-03-02 10:18:31.930222-03	4	pikaxu	2	[{"changed": {"fields": ["Password", "Rut", "Edad", "Fecha nacimiento"]}}]	4	2
-5	2021-03-02 10:53:56.536564-03	4	pikaxu	2	[{"changed": {"fields": ["First name", "Last name", "Email address"]}}]	4	2
-6	2021-03-02 11:06:06.548294-03	5	jpperez	2	[{"changed": {"fields": ["User permissions"]}}]	4	2
 7	2021-03-02 20:41:07.272761-03	10	jona12	2	[{"changed": {"fields": ["Rol"]}}]	4	8
 8	2021-03-02 20:41:47.442728-03	10	jona12	2	[]	4	8
+9	2021-03-03 10:57:11.689889-03	2	paralele	3		4	8
+10	2021-03-03 10:57:11.692685-03	9	pedrito	3		4	8
+11	2021-03-03 10:57:11.693759-03	11	esteban12	3		4	8
 \.
 
 
@@ -636,7 +654,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 --
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
-m7qujctfsf9dn08kpojukroo2lgexf94	.eJxVjMsOwiAQRf-FtSGURwGX7v0GMgMzUjU0Ke3K-O_apAvd3nPOfYkE21rT1mlJUxFnEcTpd0PID2o7KHdot1nmua3LhHJX5EG7vM6FnpfD_Tuo0Ou3VqM3uZQMxmHgwTkmJO8LOMKoco6DVszBcgBvjR-j1cYiMqigvWIn3h8FNDhB:1lHFiL:82TutmG6wk2Vvyqw-0LJhSMYYNWZB5vWNVgl7ICx59M	2021-03-16 21:50:09.775641-03
+o3m0v7yb5x7byas28h4k9lkq7170vn6m	.eJxVjMsOwiAUBf-FtSEtCBSX7vsN5HIfUjU0Ke3K-O_apAvdnpk5L5VgW0vaGi9pInVRQZ1-twz44LoDukO9zRrnui5T1ruiD9r0OBM_r4f7d1CglW_txWMWQyEjessdBmdtLx6M2DMZBxyBsfcCg6VsQwRAya4jgyEObNT7AxV2OSQ:1lHZIW:mTCNGSK_NOAP42J_nQ3WHqPBfWf5FCTACoVuZqaYCPs	2021-03-17 18:44:48.411482-03
 \.
 
 
@@ -644,7 +662,7 @@ m7qujctfsf9dn08kpojukroo2lgexf94	.eJxVjMsOwiAQRf-FtSGURwGX7v0GMgMzUjU0Ke3K-O_apA
 -- Name: app_examenes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.app_examenes_id_seq', 4, true);
+SELECT pg_catalog.setval('public.app_examenes_id_seq', 30, true);
 
 
 --
@@ -658,7 +676,7 @@ SELECT pg_catalog.setval('public.app_user_groups_id_seq', 1, false);
 -- Name: app_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.app_user_id_seq', 11, true);
+SELECT pg_catalog.setval('public.app_user_id_seq', 12, true);
 
 
 --
@@ -693,7 +711,7 @@ SELECT pg_catalog.setval('public.auth_permission_id_seq', 28, true);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 8, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 11, true);
 
 
 --

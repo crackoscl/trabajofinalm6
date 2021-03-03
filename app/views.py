@@ -11,8 +11,6 @@ from django.template.loader import render_to_string
 from .forms import  Examen, FormularioPacientes
 
 
-    
-    
 def inicio(request):
     return render(request,'app/index.html')
 
@@ -44,8 +42,13 @@ def graficos(request):
     orina = []
     fecha_orina = []
     fechas = []
+   
+   
+    if request.user.rol == 'Paciente':
+        charts = Examenes.objects.filter(paciente_id= request.user.id).values()
+    else:
+        charts = Examenes.objects.values()  
     
-    charts = Examenes.objects.values()
     for item in charts:
         if item['nombre'] == 'glucosa':
             glucosa.append(item['valor'])
@@ -73,14 +76,16 @@ def agendar(request):
     return render(request,'app/Agendar.html')
 
 
-
-
 @login_required(login_url="/login/")
 @user_passes_test(funcion_permiso_medico_paciente) 
 def listar_examenes(request):
-        examenes = Examenes.objects.all()
-        context = {"lista_examenes": examenes}
-        return render(request,'app/examenes/Examenes.html',context)
+    
+    if request.user.rol == 'Paciente':
+        examenes = Examenes.objects.filter(paciente_id= request.user.id).values()
+    else:
+         examenes = Examenes.objects.all()
+    context = {"lista_examenes": examenes}
+    return render(request,'app/examenes/Examenes.html',context)
     
 
 @login_required(login_url="/login/")
@@ -93,7 +98,6 @@ def crear_examen(request):
         if formulario.is_valid():
             datos_formulario = formulario.cleaned_data
             datos_formulario['fecha'] = datos_formulario['fecha'].strftime("%Y-%m-%d")
-            print(datos_formulario)
             Examenes.objects.create(
                 nombre = datos_formulario['nombre'],
                 valor = datos_formulario['valor'],
@@ -103,9 +107,11 @@ def crear_examen(request):
             )
             data['formulario_is_valid'] = True
             examenes = Examenes.objects.all()
+
             data['html_examenes_list'] = render_to_string('app/examenes/Examenes_lista_parcial.html',{
                 'lista_examenes': examenes
                 })      
+           
         else:
             data['formulario_is_valid'] = False 
     else:
@@ -224,16 +230,12 @@ def editar_paciente_db(request, pk):
     
     if request.method == 'GET':
         paciente= User.objects.filter(pk = pk).values()[0]
-        print(paciente)
-        
         formulario = FormularioPacientes(initial=paciente)
         context = {'formulario':formulario, 'pk': pk}
         return render( request, 'app/editar_paciente_db.html', context)
     
     elif request.method == 'POST':
-        
         formulario_devuelto = FormularioPacientes(request.POST)
-        print(formulario_devuelto)
         if formulario_devuelto.is_valid() == True:
             datos_formulario = formulario_devuelto.cleaned_data
             datos_formulario['fecha_nacimiento']= datos_formulario['fecha_nacimiento'].strftime("%Y-%m-%d")

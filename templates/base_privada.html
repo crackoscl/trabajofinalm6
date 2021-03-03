@@ -89,12 +89,16 @@
                     <img class="iconos" src="{% static 'app/img/estadisticas.png' %}">
                     Estadisticas
                 </a>
-
-                 <a href="{% url 'app:agregar_usuario_db' %}" class="bg-dark list-group-item list-group-item-action">
-                   
+                    {% if user.is_authenticated %}
+                    {% if user.rol == 'Paciente' %}
+                    {% else %}
+                    <a href="{% url 'app:agregar_usuario_db' %}" class="bg-dark list-group-item list-group-item-action">
                     <img class="iconos" src="{% static 'app/img/perfil.png' %}">
                     Agregar usuario
                 </a>
+                    {% endif %}
+                    {% endif %}
+                
             </ul>
         </div>
         <!-- sidebar-container END -->

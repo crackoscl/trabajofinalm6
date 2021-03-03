@@ -27,8 +27,9 @@ $(function () {
       type: form.attr("method"),
       dataType: 'json',
       success: function (data) {
-        console.log(data)
+     
         if (data.formulario_is_valid) {
+          console.log(data)
           $("#tabla-datos tbody").html(data.html_examenes_list)
           $("#modal-form").modal("hide");
           swal("Correcto", "Precione OK para cerrar!", "success");
