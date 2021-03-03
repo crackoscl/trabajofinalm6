@@ -1,35 +1,24 @@
 {% extends "base_privada.html" %}
 {% load static %}
 
-            
+         {% if user.is_authenticated %}
+                  
          {% block imagenperfil %}
-                {% if perfiluser %}
-                    <img class="img-fluid rounded" src="{{perfiluser.foto}}">
-                {% else %}
-                    <img class="img-fluid rounded" src="{% static 'app/img/profe luis.jpg' %}">
-                {% endif %}
+                    <img class="img-fluid rounded" src="{{user.foto}}">
          {% endblock imagenperfil %}
 
         {% block main %}
         <div class="col py-3">
             <div class="block-header">
-            {% comment %} {% include 'app/perfil_form.html' %} {% endcomment %}
-                {% if perfiluser %}
-                    <h2>Perfil {{perfiluser.nombre}}</h2>
-                {% else %}
-                    <h2>Perfil Luis Jaraquemada</h2>
-                {% endif %}
+               
+                    <h2>Perfil {{user.first_name}}</h2>
 
                 <small class="text-muted"></small>
             </div>
             <div class="row">
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="card profile">
-                        {% if perfiluser %}
-                            <img class="img-fluid" src="{{perfiluser.foto}}" alt="">
-                        {% else %}
-                            <img class="img-fluid" src="{% static 'app/img/TiCn5dVo_400x400.jpg' %}" alt="">
-                        {% endif %}
+                            <img class="img-fluid" src="{{user.foto}}" alt="">
                     </div>
                     <div class="card">
                         <div class="header">
@@ -37,39 +26,16 @@
                         </div>
                         <div class="body">
                             <strong>Nombre</strong>
-                            {% if perfiluser %}
-                               <p>{{perfiluser.nombre}}</p>
-                            {% else %}
-                             <p>Luis Jaraquemada</p>
-                            {% endif %}
-                           
+                               <p>{{user.first_name}}</p> 
                             <strong>Occupation</strong>
-                            {% if perfiluser %}
-                               <p>{{perfiluser.ocupacion}}</p>
-                            {% else %}
-                                <p>Linux Lover</p>
-                            {% endif %}
-                            
+                               <p>{{user.ocupacion}}</p>    
                             <strong>Email</strong>
-                            {% if perfiluser %}
-                               <p>{{perfiluser.correo}}</p>
-                            {% else %}
-                                <p>norecuerdoelEmail@gmail.com</p>
-                            {% endif %}
+                               <p>{{user.correo}}</p>
                             <strong>Telefono</strong>
-                            {% if perfiluser %}
-                               <p>{{perfiluser.telefono}}</p>
-                            {% else %}
-                                <p>+5691506045</p>
-                            {% endif %}
+                               <p>{{user.telefono}}</p>
                             <hr>
                             <strong>Direccion</strong>
-                            {% if perfiluser %}
-                               <p>{{perfiluser.direccion}}</p>
-                            {% else %}
-                              <address>pasaje #1000,Santiago</address>
-                            {% endif %}
-                            
+                              <address>{{user.direccion}}</address>    
                         </div>
                     </div>
                 </div>
@@ -95,15 +61,7 @@
                                         <div class="wrap-reset">
                                             <div class="post-list">
                                                 <div class="post-box">
-                                                    {% if perfiluser %}
-                                                        <p>{{perfiluser.resumen}}</p>
-                                                        {% else %}
-                                                         <p>Paciente presenta hipertension y colesterol alto
-                                                            El 11 de Noviembre se deriva al cardiologo Mario Adad para toma de examenes
-                                                            El 22 de Noviembre se toma un electrocardiograma que aparece inconcluso
-                                                            Se le agenda citas para diciembre y Enero para toma de mas examenes
-                                                        </p>
-                                                        {% endif %}
+                                                        <p>{{user.resumen}}</p>
                                                     <hr>
                                                     <div class="post-box">
                                                         <h4>Reporte general</h4>
@@ -155,13 +113,7 @@
                                                     <hr>
                                                     <h4>Educacion</h4>
                                                     <ul class="dis">
-                                                    
-                                                    {% if perfiluser %}
-                                                      <li>{{perfiluser.educacion}}</li>
-                                                    {% else %}
-                                                        <li> Ingeniero Informatico</li>
-                                                    {% endif %}
-                                                                    
+                                                      <li>{{user.educacion}}</li>              
                                                     </ul>
                                                     <hr>
                                                 </div>
@@ -235,6 +187,8 @@
         <!-- Main Col END -->
     
     {% endblock main %}
+
+  {% endif %} 
 
     {% block footer %}
     <footer class="footer fixed.bottom bg-dark text-center">

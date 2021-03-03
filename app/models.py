@@ -4,7 +4,8 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    rut = models.CharField(max_length=10, )
+    
+    rut = models.CharField(max_length=10)
     edad = models.IntegerField(null=True)
     fecha_nacimiento = models.DateField(null=True)
     direccion = models.CharField(max_length=150,blank=True)
@@ -23,6 +24,7 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+    
     
     
 class Examenes(models.Model):

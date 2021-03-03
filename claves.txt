@@ -1,2 +1,9 @@
 usuario : luis.jaraquemada@team.awakelab.cl
 clave: 123456
+
+superuser = crackoscl
+clave = 12345 
+
+pacientes,medicos,etc ( clave = 12345) 
+
+https://github.com/crackoscl/trabajofinalm6/tree/gilbert2

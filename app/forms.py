@@ -2,15 +2,6 @@
 from django import forms
 from django.core import validators
 from .models import User
-
-# class Login(forms.Form):
-     
-#     correo = forms.EmailField(required=False)
-#     clave = forms.CharField(label='Contraseña',required=False,widget = forms.PasswordInput())
-   
-#     correo.widget.attrs.update({'class': 'form-control'})
-#     clave.widget.attrs.update({'class': 'form-control'})
-    
     
 class Examen(forms.Form):
     
@@ -28,7 +19,15 @@ class Examen(forms.Form):
 
     
 class FormularioPacientes(forms.Form):
-    rol = forms.CharField()
+    
+    CHOICES =( 
+        ("Medico", "Medico"), 
+        ("Paciente", "Paciente"), 
+        ("Familiar", "Familar"), 
+        ("Cuidador_Autorizado", "Cuidador_Autorizado"), 
+            ) 
+
+    rol = forms.ChoiceField(choices=CHOICES , required=True)
     username = forms.CharField(label='Nombre Usuario ',validators=[validators.MinLengthValidator(2,"Su UserName debe poseer mas de 2 caracteres")])
     first_name  = forms.CharField(label='Nombre',validators=[validators.MinLengthValidator(2,"Su Nombre debe poseer mas de 2 caracteres")])
     last_name = forms.CharField(label='Apellido',validators=[validators.MinLengthValidator(2,"Su Apellido debe poseer mas de 2 caracteres")])

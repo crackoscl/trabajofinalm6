@@ -3,24 +3,13 @@ from django.contrib.auth.hashers import make_password
 from typing import ContextManager
 import datetime
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test 
 from django.conf import settings
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from .forms import  Examen, FormularioPacientes
-from django.contrib.auth.decorators import login_required
 
-# Create your views here.
-
-# def buscar(correo,clave,administradores, pacientes):
-#     for item in administradores:
-#         print("Estos son los campos obtenidos de administradores", item)
-#         if item['correo'] == correo and item['clave'] == clave:
-#             return True
-        
-#     for item in pacientes:
-#         print("Estos son los campos obtenidos de pacientes", item)
-#         if item['correo'] == correo and item['clave'] == clave:
-#             return True
     
 def inicio(request):
     # if request.method == "GET":
@@ -28,51 +17,16 @@ def inicio(request):
     #     context = {'formulario':formulario}
     return render(request,'app/index.html')
 
-# def login_user(request):
-#     if request.method == "POST":
-#         formulario_lleno = Login(request.POST)
-#         if formulario_lleno.is_valid() == True:
-            
-#             data = formulario_lleno.cleaned_data
-#             pacient = Pacientes.objects.values()
-#             admins = Administradores.objects.values()
-#             validar = buscar(data['correo'],data['clave'],admins, pacient)
-#             if validar == True:
-#                 return redirect('app:private')
-#             else:
-#                 formulario_lleno = Login()
-#                 return redirect('app:inicio')               
-#         else:
-#             formulario_lleno = Login()
-#             return redirect('app:inicio')
-
 
 @login_required(login_url="/login/")
 def private(request):
-    
-    # if request.method == "POST":
-        # id_usuario = request.POST.get('usuarios')
-        # perfiles = User.objects.values()
-    #     print(perfiles)
-    #     for perfil in perfiles:
-    #         if int(perfil['id'] == int(id_usuario)):
-    #             usuario = perfil    
-    #     return render(request,'app/Privada.html',{"perfiluser": usuario,'perfiles':perfiles})
-        
-            
-    #     return redirect('app:private') ### render post de usuario
-   
-    # elif request.method == "GET":
-    #     formulario = Selectform(request.GET)
     perfiles = User.objects.values()
-    #     perfilusuario = User.objects.values()
     context = {'perfiles':perfiles}
     return render(request,'app/Privada.html',context)
    
     
 @login_required(login_url="/login/")
 def graficos(request):
-    
     datos = {}
     glucosa = []
     fecha_glucosa = []
@@ -108,7 +62,13 @@ def graficos(request):
 def agendar(request):
     return render(request,'app/Agendar.html')
 
+
+
+def funcion_permiso(user):
+    return user.rol == 'paciente'
+
 @login_required(login_url="/login/")
+@user_passes_test(funcion_permiso) 
 def listar_examenes(request):
         examenes = Examenes.objects.all()
         context = {"lista_examenes": examenes}
@@ -207,7 +167,12 @@ def context_lista_pacientes():
     return context
 
 
-@login_required(login_url="/login/")       
+
+# def funcion_permiso(user):
+#     return user.rol == 'medico'
+
+@login_required(login_url="/login/")  
+#@user_passes_test(funcion_permiso)     
 def agregar_usuario_db(request):
     
     if request.method == 'GET':
@@ -225,13 +190,13 @@ def agregar_usuario_db(request):
         
         if formulario_devuelto.is_valid() == True:
             datos_formulario = formulario_devuelto.cleaned_data
-            datos_formulario['fecha']= datos_formulario['fecha'].strftime("%Y-%m-%d")
+            datos_formulario['fecha_nacimiento']= datos_formulario['fecha_nacimiento'].strftime("%Y-%m-%d")
             User.objects.create_user(
-                                  username = datos_formulario['user_name'],
-                                  first_name = datos_formulario['nombre'],
-                                  last_name = datos_formulario['apellido'],
+                                    username = datos_formulario['username'],
+                                    first_name = datos_formulario['first_name'],
+                                    last_name = datos_formulario['last_name'],
                                     email= datos_formulario['email'],
-                                    password = datos_formulario['password'],
+                                    password = make_password(datos_formulario['password']),
                                     rut= datos_formulario['rut'],
                                     edad = datos_formulario['edad'],
                                     fecha_nacimiento = datos_formulario['fecha_nacimiento'],
@@ -279,7 +244,6 @@ def editar_paciente_db(request, pk):
                                     last_name = datos_formulario['last_name'],
                                     email= datos_formulario['email'],
                                     password = make_password(datos_formulario['password']),
-                                   
                                     rut= datos_formulario['rut'],
                                     edad = datos_formulario['edad'],
                                     fecha_nacimiento = datos_formulario['fecha_nacimiento'],
