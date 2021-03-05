@@ -8,6 +8,7 @@ class Examen(forms.Form):
         ("hemograma", "hemograma"), 
         ("orina", "orina"), 
         ("glucosa", "glucosa"), 
+        ("creatina", "creatina"),
             ) 
     
     perfil = forms.ModelChoiceField(queryset=User.objects.all().exclude(is_superuser=True))

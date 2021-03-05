@@ -26,9 +26,17 @@ def funcion_permiso_medico(user):
 @login_required(login_url="/login/")
 @user_passes_test(funcion_permiso_medico_paciente) #Login Medico Paciente
 def private(request):
+    porcentajes = dict()
+    p_glucosa = sum([int(valor.valor) for valor in Examenes.objects.filter(paciente_id=request.user.id).filter(nombre='glucosa')]) /100
+    p_orina = sum([int(valor.valor) for valor in Examenes.objects.filter(paciente_id=request.user.id).filter(nombre='orina')]) /100
+    p_hemograma = sum([int(valor.valor) for valor in Examenes.objects.filter(paciente_id=request.user.id).filter(nombre='hemograma')]) /100
+    porcentajes['p_glucosa'] = int(p_glucosa)
+    porcentajes['p_orina'] = int(p_orina)
+    porcentajes['p_hemograma'] = int(p_hemograma) 
     perfiles = User.objects.values()
-    context = {'perfiles':perfiles}
-    return render(request,'app/Privada.html',context)
+   
+    return render(request,'app/Privada.html',{'perfiles':perfiles,'porcentajes':porcentajes})
+   
    
 
 @login_required(login_url="/login/")
@@ -45,7 +53,7 @@ def graficos(request):
    
    
     if request.user.rol == 'Paciente':
-        charts = Examenes.objects.filter(paciente_id= request.user.id).values()
+        charts = Examenes.objects.filter(paciente_id = request.user.id).values()
     else:
         charts = Examenes.objects.values()  
     

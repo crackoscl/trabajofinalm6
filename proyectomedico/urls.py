@@ -25,7 +25,3 @@ urlpatterns = [
     path('logout/',LogoutView.as_view(), name='logout'),
 ]
  
- 
- #url(r'^$', LoginView.as_view(), name= 'login'),
-  #----
-  # url(r'^logout$', LogoutView.as_view(), name= 'logout'),
