@@ -23,10 +23,13 @@ def funcion_permiso_medico(user):
     return user.rol == 'Medico'
 
 
+        
+# from django.db.models import Sum
 @login_required(login_url="/login/")
 @user_passes_test(funcion_permiso_medico_paciente) #Login Medico Paciente
 def private(request):
     porcentajes = dict()
+    # Examenes.objects.values('nombre').annotate(total=Sum('valor')) No funciona :/
     p_glucosa = sum([int(valor.valor) for valor in Examenes.objects.filter(paciente_id=request.user.id).filter(nombre='glucosa')]) /100
     p_orina = sum([int(valor.valor) for valor in Examenes.objects.filter(paciente_id=request.user.id).filter(nombre='orina')]) /100
     p_hemograma = sum([int(valor.valor) for valor in Examenes.objects.filter(paciente_id=request.user.id).filter(nombre='hemograma')]) /100
