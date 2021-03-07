@@ -1,2 +1,0 @@
-usuario : luis.jaraquemada@team.awakelab.cl
-clave: 123456
