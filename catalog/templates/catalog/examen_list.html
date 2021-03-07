@@ -26,9 +26,15 @@
 {% endif %}
 
 <hr>
-
+{% if perms.catalog.acceso_natural %}
 <button>
   <a href="{% url 'examen_create' %}">| Crear nuevo examen |</a>
 </button>
+{% else %}
+<button>
+  <a>No posees privilegios para crear examen</a>
+</button>
+{% endif %}
+
 
 {% endblock %}

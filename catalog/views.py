@@ -8,7 +8,7 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from .models import examen, paciente, examenInstance, Genre
+from .models import examen, paciente
 import datetime
 #-----------------------------------------------------
 
@@ -20,11 +20,6 @@ def index(request):
     """
     # Genera contadores de algunos de los objetos principales
     num_examenes = examen.objects.all().count()
-    num_instances = examenInstance.objects.all().count()
-    # Libros disponibles (status = 'a')
-    num_instances_available = examenInstance.objects.filter(
-        status__exact='a').count()
-    # El 'all()' esta implícito por defecto.
     num_pacientes = paciente.objects.count()
 
     # Numero de visitas a esta view, como está contado en la variable de sesión.
@@ -33,8 +28,6 @@ def index(request):
 
     context = {
         'num_examenes':num_examenes,
-        'num_instances':num_instances,
-        'num_instances_available':num_instances_available,
         'num_pacientes':num_pacientes,
         'num_visits':num_visits,
     } 
@@ -44,7 +37,9 @@ def index(request):
 #-----------------------------------------INICIO------
 
 #-----------------------------------------GRAFICOS------
+@permission_required('catalog.acceso_natural')
 def graficos(request):
+    
     datos = {}
     glucosa = []
     fecha_glucosa = []
@@ -78,7 +73,7 @@ def graficos(request):
 
 
 #-----------------------------------------CRUD examen------
-class examenListView(generic.ListView):
+class examenListView(generic.ListView):#lISTAR
     model = examen
     paginate_by = 5
 
@@ -89,25 +84,28 @@ class examenListView(generic.ListView):
         context['some_data'] = 'This is just some data'
         return context 
 
-class examenCreate(CreateView):
+class examenCreate(CreateView):#CREAR
     model = examen
     fields = '__all__'
     initial={'isbn':'1234567891234',}
 
-class examenUpdate(UpdateView):
+class examenUpdate(UpdateView):#ACTUALIZAR
     model = examen
     fields = ['paciente','Nombre','Valor_Examen','Fecha', 'Observaciones']
 
-class examenDelete(DeleteView):
+class examenDelete(PermissionRequiredMixin, DeleteView):#ELIMINAR
+    permission_required = 'catalog.acceso_natural'
     model = examen
     success_url = reverse_lazy('examenes')
+   
+
 #-----------------------------------------DETALLES examen------
-class examenDetailView(generic.DetailView):
+class examenDetailView(generic.DetailView):#VISTADETALLADA
     model = examen
 #-----------------------------------------DETALLES examen------
 
 #-----------------------------------------CRUD paciente------
-class pacienteListView(generic.ListView):
+class pacienteListView(generic.ListView): #LISTAR
     model = paciente
     paginate_by = 5
 
@@ -118,22 +116,22 @@ class pacienteListView(generic.ListView):
         context['some_data'] = 'This is just some data'
         return context 
 
-class pacienteCreate(CreateView):
+class pacienteCreate(CreateView):#CREAR
     model = paciente
     fields = '__all__'
     initial={'Rut':'183623835'}
 
-class pacienteUpdate(UpdateView):
+class pacienteUpdate(UpdateView):#ACTUALIZAR
     model = paciente
     fields = ['Foto_perfil', 'Rut', 'Nombre', 'Apellido', 'Nacimiento',
             'Edad', 'Telefono', 'Direccion', 'Correo', 'Password', 'Ocupacion',
             'Resumen', 'Educacion', 'Historial', 'Rol']
 
-class pacienteDelete(DeleteView):
+class pacienteDelete(DeleteView):#ELIMINAR
     model = paciente
     success_url = reverse_lazy('pacientes')
 #-----------------------------------------DETALLES paciente------
-class pacienteDetailView(generic.DetailView):
+class pacienteDetailView(generic.DetailView): #VISTADETALLADA
     model = paciente
 #-----------------------------------------DETALLES paciente------
 

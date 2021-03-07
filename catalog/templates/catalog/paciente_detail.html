@@ -1,36 +1,58 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Paciente Seleccionado : {{paciente}}</h1>
-  <p>Fecha de Nacimiento : {{paciente.Nacimiento}} <br> {% if paciente.Rut  %} Cedula de Identidad : {{paciente.Rut}}{% endif %}</p>
-  <hr>
-  {% if user.is_staff %}
-        {{ paciente.borrower }}
-        {% endif %} 
-        {% if perms.catalog.can_mark_returned %}
-        <button>
-        <a href="{% url 'paciente_update' paciente.id %}">Editar Paciente</a>  
-        </button>
-  {% endif %}
-  {% if user.is_staff %}
-        {{ paciente.borrower }}
-        {% endif %} 
-        {% if perms.catalog.can_mark_returned %}
-        <button>
-          <a href="{% url 'paciente_delete' paciente.id %}">Eliminar Paciente</a>  
-        </button>        
-  {% endif %}
-  <hr>
-  
+<h2>Datos personales :</h2>
+<hr>
+<p>Nombre: {{paciente.Nombre}} {{paciente.Apellido}}</p>
+<p>{% if paciente.Rut %} Cedula de Identidad : {{paciente.Rut}}{% endif %}</p>
+<p>Fecha de Nacimiento : {{paciente.Nacimiento}} </p>
+<p>Edad : {{paciente.Edad}} </p>
+<hr>
+<h3>Datos de contacto</h3>
+<hr>
+<p>Telefono : {{paciente.Telefono}} </p>
+<p>Direccion : {{paciente.Direccion}} </p>
+<p>Correo : {{paciente.Correo}} </p>
+<hr>
+<h3>Datos asociados</h3>
+<hr>
+<p>Ocupacion actual : {{paciente.Ocupacion}} </p>
+<p>Resumen de Examen : {{paciente.Resumen}} </p>
+<p>Historial Clinico : {{paciente.Historial}} </p>
+<p>Educacion previa : {{paciente.Educacion}} </p>
 
-  <div style="margin-left:20px;margin-top:20px">
-    <h4>Actuales examenes para este paciente</h4>
+<hr>
 
-    <dl>
+{% if perms.catalog.acceso_natural %}
+<button>
+  <a href="{% url 'paciente_update' paciente.id %}">Editar Paciente</a>
+</button>
+{% else %}
+<button>
+  <a>No posees privilegios para editar</a>
+</button>
+{% endif %}
+
+{% if perms.catalog.acceso_natural %}
+<button>
+  <a href="{% url 'paciente_delete' paciente.id %}">Eliminar Paciente</a>
+</button>
+{% else %}
+<button>
+  <a>No posees privilegios para eliminar</a>
+</button>
+{% endif %}
+<hr>
+
+
+<div style="margin-left:20px;margin-top:20px">
+  <h4>Examenes en vigencia desigandos para el/la paciente :{{paciente.Nombre}}</h4>
+
+  <dl>
     {% for examen in paciente.examen_set.all %}
-      <dt><a href="{% url 'examen-detail' examen.pk %}">{{examen}}</a> ({{examen.exameninstance_set.all.count}})</dt>
-      <dd>{{examen.summary}}</dd>
+    <dt><a href="{% url 'examen-detail' examen.pk %}">{{examen}}</a></dt>
+    <dd>{{examen.summary}}</dd>
     {% endfor %}
-    </dl>
-  </div>
+  </dl>
+</div>
 {% endblock %}

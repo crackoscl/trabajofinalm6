@@ -277,90 +277,6 @@ ALTER SEQUENCE public.catalog_examen_id_seq OWNED BY public.catalog_examen.id;
 
 
 --
--- Name: catalog_exameninstance; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.catalog_exameninstance (
-    id uuid NOT NULL,
-    imprint character varying(200) NOT NULL,
-    due_back date,
-    status character varying(1) NOT NULL,
-    borrower_id integer,
-    examen_id integer
-);
-
-
-ALTER TABLE public.catalog_exameninstance OWNER TO postgres;
-
---
--- Name: catalog_genre; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.catalog_genre (
-    id integer NOT NULL,
-    name character varying(200) NOT NULL
-);
-
-
-ALTER TABLE public.catalog_genre OWNER TO postgres;
-
---
--- Name: catalog_genre_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.catalog_genre_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.catalog_genre_id_seq OWNER TO postgres;
-
---
--- Name: catalog_genre_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.catalog_genre_id_seq OWNED BY public.catalog_genre.id;
-
-
---
--- Name: catalog_language; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.catalog_language (
-    id integer NOT NULL,
-    name character varying(200) NOT NULL
-);
-
-
-ALTER TABLE public.catalog_language OWNER TO postgres;
-
---
--- Name: catalog_language_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.catalog_language_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.catalog_language_id_seq OWNER TO postgres;
-
---
--- Name: catalog_language_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.catalog_language_id_seq OWNED BY public.catalog_language.id;
-
-
---
 -- Name: catalog_paciente; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -583,20 +499,6 @@ ALTER TABLE ONLY public.catalog_examen ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
--- Name: catalog_genre id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.catalog_genre ALTER COLUMN id SET DEFAULT nextval('public.catalog_genre_id_seq'::regclass);
-
-
---
--- Name: catalog_language id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.catalog_language ALTER COLUMN id SET DEFAULT nextval('public.catalog_language_id_seq'::regclass);
-
-
---
 -- Name: catalog_paciente id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -629,6 +531,11 @@ ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('p
 --
 
 COPY public.auth_group (id, name) FROM stdin;
+4	Cuidador Autorizado
+3	Medico
+1	Super Administrador del Sistema
+5	Familiar
+2	Paciente
 \.
 
 
@@ -690,6 +597,12 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 43	Can change log entry	11	change_logentry
 44	Can delete log entry	11	delete_logentry
 45	Can view log entry	11	view_logentry
+46	Set book as returned	5	can_mark_returned
+47	Seeeeeeeeeeeet book as returned	5	caaaaaaaaaaaan_mark_returned
+48	BORRAR DENEGADO	5	NO_PUEDE_BORRAR_EXAMEN
+49	BORRAR CONCEDIDO	5	PUEDES_BORRAR_EXAMEN
+50	Control de edicion y eliminacion	5	acceso_natural
+51	Control de edicion y eliminacion	8	acceso_natural
 \.
 
 
@@ -698,7 +611,11 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 --
 
 COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
-3	pbkdf2_sha256$216000$w0TAybBUnySp$BpLCbEstuvny7h0fsc96EagQfp5d4FWPPYoCJnqP69A=	2021-03-07 03:07:33.585644-03	t	Admin			administracion@admin.cl	t	t	2021-03-06 17:57:18.105528-03
+4	pbkdf2_sha256$216000$JhXHT3HGeTcn$Mnk7TPVKIO8FkkbfkKYaCebQt1wHAcFhJITdGeRgc3g=	2021-03-07 04:08:52-03	f	Paciente1	Ernesto	Malandra	comoquisierasertuamor@gmail.com	f	t	2021-03-07 04:08:53-03
+7	pbkdf2_sha256$216000$VsaN2p3yKjDl$lk5h+b4Jtf7669xMSqz6eMZySGZbUt++OUiVKcskjFs=	2021-03-07 14:53:32-03	f	Medico1	Natalia	Cuadros	mecreobacanporquetengotitulo@gmail.com	t	t	2021-03-07 13:43:26-03
+3	pbkdf2_sha256$216000$w0TAybBUnySp$BpLCbEstuvny7h0fsc96EagQfp5d4FWPPYoCJnqP69A=	2021-03-07 16:39:25.509199-03	t	Admin	Jhonn	Bruna	administracion@admin.cl	t	t	2021-03-06 17:57:18-03
+6	pbkdf2_sha256$216000$b7SfJx7i0NnH$Tmr8RtMU3/FcMv/kwYuFNyal5yy6WPq2s0QMEIX5HGg=	2021-03-07 16:42:43.100783-03	f	Cuidador1	Dave	Mustaine	megadeath@metallica.com	t	t	2021-03-07 13:41:25-03
+5	pbkdf2_sha256$216000$J1xeowqIlNO5$58Ho8w7aKUOaGJmaN9F0m4USDCBMgpIJDAxY4Qc0DgM=	2021-03-07 16:43:23.828102-03	f	Familiar1	Daria	Reyes	parapodervivirasi@gmail.com	f	t	2021-03-07 13:39:57-03
 \.
 
 
@@ -707,6 +624,11 @@ COPY public.auth_user (id, password, last_login, is_superuser, username, first_n
 --
 
 COPY public.auth_user_groups (id, user_id, group_id) FROM stdin;
+1	3	1
+2	4	2
+3	5	5
+4	6	4
+5	7	3
 \.
 
 
@@ -715,6 +637,7 @@ COPY public.auth_user_groups (id, user_id, group_id) FROM stdin;
 --
 
 COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
+7	7	50
 \.
 
 
@@ -725,33 +648,8 @@ COPY public.auth_user_user_permissions (id, user_id, permission_id) FROM stdin;
 COPY public.catalog_examen (id, "Nombre", "Valor_Examen", "Fecha", "Observaciones", paciente_id) FROM stdin;
 15	hemograma	300	2021-05-05	Hemograma a la vena	6
 16	glucosa	150	2021-05-05	Azucar hasta en la vena	6
-17	hemograma	20	2021-05-09	Claramente a mejorado.	8
 14	orina	100	2021-05-05	Aloha	6
 18	orina	20	2021-07-09	hcae tiempo que no veia esto	8
-\.
-
-
---
--- Data for Name: catalog_exameninstance; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.catalog_exameninstance (id, imprint, due_back, status, borrower_id, examen_id) FROM stdin;
-\.
-
-
---
--- Data for Name: catalog_genre; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.catalog_genre (id, name) FROM stdin;
-\.
-
-
---
--- Data for Name: catalog_language; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.catalog_language (id, name) FROM stdin;
 \.
 
 
@@ -762,6 +660,8 @@ COPY public.catalog_language (id, name) FROM stdin;
 COPY public.catalog_paciente (id, "Foto_perfil", "Rut", "Nombre", "Apellido", "Nacimiento", "Edad", "Telefono", "Direccion", "Correo", "Password", "Ocupacion", "Resumen", "Educacion", "Historial", "Rol") FROM stdin;
 6	Inserte una URL	183623834	Jhonn	Bruna	1992-12-24	28	321654987	Roda 45454	arroba@arroba.com	123456	influencer	Ingrese un breve resumen	Ingrese estudios	Ingrese historial clinico	paciente
 8	Foto.png	183623835	Andrea	Carilangui	1994-05-12	26	321654987	Roda 4542	alibaba@arroba.com	123456	Estudiante	Esta paciente llego hace poco a la ciudad y viene por alergias	En harvard	Su historial clinico: es deprimente	paciente
+9	Inserte una URL	184785691	Emilio	Verdugo	1991-05-12	29	321147987	Troncos viejos	emiliane@live.cl	123456	Estudiante	Ingrese un breve resumen	Ingrese estudios	Ingrese historial clinico	paciente
+10	Inserte una URL	183623835	Shon	Cito	2020-05-12	30	321654987	Rodax 5454	hola@gmail.com	123456	influencer	Ingrese un breve resumen	Ingrese estudios	Ingrese historial clinico	paciente
 \.
 
 
@@ -771,6 +671,39 @@ COPY public.catalog_paciente (id, "Foto_perfil", "Rut", "Nombre", "Apellido", "N
 
 COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
 1	2021-03-06 21:09:53.624747-03	10	Prostata	3		5	3
+2	2021-03-07 04:06:47.139516-03	1	Administradores	1	[{"added": {}}]	2	3
+3	2021-03-07 04:06:59.020794-03	2	Pacientes	1	[{"added": {}}]	2	3
+4	2021-03-07 04:07:04.124096-03	3	Medicos	1	[{"added": {}}]	2	3
+5	2021-03-07 04:07:21.647633-03	3	Admin	2	[{"changed": {"fields": ["First name", "Last name", "Groups"]}}]	3	3
+6	2021-03-07 04:08:38.23636-03	4	Emilio	1	[{"added": {}}]	3	3
+7	2021-03-07 04:08:54.793174-03	4	Emilio	2	[{"changed": {"fields": ["Groups", "Last login", "Date joined"]}}]	3	3
+8	2021-03-07 13:26:35.146663-03	4	Paciente1	2	[{"changed": {"fields": ["Username", "First name", "Last name", "Email address"]}}]	3	3
+9	2021-03-07 13:34:24.180673-03	4	Paciente1	2	[]	3	3
+10	2021-03-07 13:35:07.426934-03	4	Cuidador Autorizado	1	[{"added": {}}]	2	3
+11	2021-03-07 13:35:24.903017-03	3	Medico	2	[{"changed": {"fields": ["Name"]}}]	2	3
+12	2021-03-07 13:35:26.352734-03	3	Medico	2	[]	2	3
+13	2021-03-07 13:35:39.289481-03	1	Super Administrador del Sistema	2	[{"changed": {"fields": ["Name"]}}]	2	3
+14	2021-03-07 13:35:51.44424-03	5	Familiar	1	[{"added": {}}]	2	3
+15	2021-03-07 13:37:46.161972-03	2	Paciente	2	[{"changed": {"fields": ["Name"]}}]	2	3
+16	2021-03-07 13:38:59.214343-03	5	Familiar1	1	[{"added": {}}]	3	3
+17	2021-03-07 13:39:58.860476-03	5	Familiar1	2	[{"changed": {"fields": ["First name", "Last name", "Email address", "Groups", "Last login", "Date joined"]}}]	3	3
+18	2021-03-07 13:41:25.750014-03	6	Cuidador1	1	[{"added": {}}]	3	3
+19	2021-03-07 13:41:48.899051-03	6	Cuidador1	2	[{"changed": {"fields": ["First name", "Last name", "Email address", "Groups"]}}]	3	3
+20	2021-03-07 13:42:45.768991-03	7	Medico1	1	[{"added": {}}]	3	3
+21	2021-03-07 13:43:29.2822-03	7	Medico1	2	[{"changed": {"fields": ["First name", "Last name", "Email address", "Groups", "Last login", "Date joined"]}}]	3	3
+22	2021-03-07 13:44:00.425671-03	3	Admin	2	[]	3	3
+23	2021-03-07 14:04:48.953731-03	6	Cuidador1	2	[{"changed": {"fields": ["User permissions"]}}]	3	3
+24	2021-03-07 14:07:02.348159-03	6	Cuidador1	2	[{"changed": {"fields": ["User permissions"]}}]	3	3
+25	2021-03-07 14:13:23.679742-03	6	Cuidador1	2	[{"changed": {"fields": ["User permissions"]}}]	3	3
+26	2021-03-07 14:17:55.636325-03	7	Medico1	2	[{"changed": {"fields": ["User permissions"]}}]	3	3
+27	2021-03-07 14:18:12.931029-03	6	Cuidador1	2	[{"changed": {"fields": ["User permissions"]}}]	3	3
+28	2021-03-07 14:20:50.190661-03	6	Cuidador1	2	[{"changed": {"fields": ["Staff status"]}}]	3	3
+29	2021-03-07 14:20:55.299818-03	7	Medico1	2	[{"changed": {"fields": ["Staff status"]}}]	3	3
+30	2021-03-07 14:24:12.20687-03	7	Medico1	2	[{"changed": {"fields": ["User permissions"]}}]	3	3
+31	2021-03-07 14:50:42.571557-03	7	Medico1	2	[{"changed": {"fields": ["User permissions"]}}]	3	3
+32	2021-03-07 15:40:39.449886-03	7	Medico1	2	[]	3	3
+33	2021-03-07 15:40:48.116134-03	6	Cuidador1	2	[]	3	3
+34	2021-03-07 15:47:36.326578-03	7	Medico1	2	[{"changed": {"fields": ["User permissions"]}}]	3	3
 \.
 
 
@@ -821,6 +754,12 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 21	catalog	0002_auto_20210306_1925	2021-03-06 19:25:14.957564-03
 22	catalog	0003_remove_examen_rut	2021-03-06 19:29:33.550284-03
 23	catalog	0004_auto_20210306_1934	2021-03-06 19:34:05.651026-03
+24	catalog	0005_auto_20210307_1400	2021-03-07 14:00:47.012398-03
+25	catalog	0006_auto_20210307_1401	2021-03-07 14:01:39.466564-03
+26	catalog	0007_auto_20210307_1410	2021-03-07 14:10:49.718844-03
+27	catalog	0008_auto_20210307_1415	2021-03-07 14:15:58.187482-03
+28	catalog	0009_auto_20210307_1543	2021-03-07 15:43:55.022832-03
+29	catalog	0010_auto_20210307_1637	2021-03-07 16:37:03.458419-03
 \.
 
 
@@ -829,11 +768,12 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 --
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
-xh9bqs5gvtvqi9716jejmj2rzmis6i1s	.eJxVjDkOwjAQRe8yNbJsZ5ukpOcM1iwOMYsjxQkN4u6AlCbtf-_9N-TtGV6ppLXA0J0g0LZOYStxCUlhgAoOG5PcY_4DvVG-zkbmvC6JzV8xOy3mMmt8nHf3cDBRmX61uHasfcfOsRul7eu2EUSviCyNRYeM3nfaRxVUJLFcOYtEniyRRoXPF4N4PYg:1lImlV:loGfhxYG2sTnw-ZOT-2HlihMxLBzDIRL5aXBeJhN8zE	2021-03-21 03:19:45.3918-03
 xfyfp2eb4j8y349ggmv0ms6vfzp8zb74	.eJxVjDkOwjAQRe8yNbJsZ5ukpOcM1iwOMYsjxQkN4u6AlCbtf-_9N-TtGV6ppLXAgCcItK1T2EpcQlIYoILDxiT3mP9Ab5Svs5E5r0ti81fMTou5zBof5909HExUpl8trh1r37Fz7EZp-7ptBNErIktj0SGj9532UQUVSSxXziKRJ0ukUeHzBYQkPYk:1lIdzO:GNUv28upe465nreB0xs9sWRyOaEBrSa_suzDXrxQPAw	2021-03-20 17:57:30.769234-03
 c8pti0aur5yq68btrqym7trmq2e07ixo	.eJxVjEsOwjAMBe_iNYri9Od2yZ4zRI6d0vBJpaZlg7g7IHXT7ZuZ94a8Pf0rlbQWGLA_gedtnfxW4uKTwgAVHLbAco_5D_TG-TobmfO6pGD-itlpMZdZ4-O8u4eDicv0qwXbsXZdQAw4StvXbSNETomCNJaQAjnXaR9VSInFhgotMTu2zBoVPl-rOD27:1lIkdz:-GiJvLfcnGJmPttRx9g1pgvoeCrn2Us_p_hKgpikTd4	2021-03-21 01:03:51.547401-03
 mu5k4dzajala8dikuzn83ukp14n7rzk1	.eJxVjDkOwjAQRe8yNbJsZ5ukpOcM1iwOMYsjxQkN4u6AlCbtf-_9N-TtGV6ppLXA0Jwg0LZOYStxCUlhgAoOG5PcY_4DvVG-zkbmvC6JzV8xOy3mMmt8nHf3cDBRmX61uHasfcfOsRul7eu2EUSviCyNRYeM3nfaRxVUJLFcOYtEniyRRoXPF4IgPYY:1lIh0a:XEap_JrKcRiaTqsmWg5H-MYAz09t79GZg9Bgu-q8UNo	2021-03-20 21:10:56.836083-03
+vhyxoqk339vvm1tadd60wxbe63odsq9h	.eJxVjMsOgyAQAP9lzw1ZVxbRY-_9BgIsVvrARLSXpv_emHjxOjOZL5Tt7T655rXCQBdwflsnt9W0uCwwAMOJBR-fqexCHr7cZxXnsi45qD1Rh63qNkt6XY_2NJh8nfYtS2siGqKuQSLkVqzHyIG1D6E3vVDs0WBKbLgZO01jw2z1yK0VRgu_P1brO60:1lIzJD:UVF0TCdznp8m03cwtHoUBIxhm_K-xqocbUQepIIGgZM	2021-03-21 16:43:23.874111-03
 xihbi780et0hylg9ieqjum0sbb5cytv0	.eJxVjDkOwjAUBe_iGlm2s_2kpM8ZrL84xCy2FCc0iLtDpBTQvpk3L-VxW2e_lbD4KGpQlTr9boR8C2kHcsV0yZpzWpdIelf0QYses4T7-XD_AjOW-ftm206168hashO3fd02DOAEgLgxYIHAuU76IAwCyIYqawDRoUGUsEfT9vDPWOJa1FC9P1FDPYQ:1lIfUx:WvCpDC356EGCaDcrWX_ZyxVVlVlCSmmJpEUCnfNFBIk	2021-03-20 19:34:11.829228-03
+1438i4h9a17saxrtlr4vzkqwna8j6j8t	.eJxVjEsOwjAMBe_iNYri9Od2yZ4zRI6d0vBJpaZlg7g7IHXT7ZuZ94a8Pf0rlbQWGBBP4HlbJ7-VuPikMEAFhy2w3GP-A71xvs5G5rwuKZi_YnZazGXW-Djv7uFg4jL9asF2rF0XEAOO0vZ12wiRU6IgjSWkQM512kcVUmKxoUJLzI4ts0aFzxel2D2z:1lIvuM:Ya_M2zb-1SQnwegqdTLtQhwICYA3hoQUWPrYYSUw6Qk	2021-03-21 13:05:30.456895-03
 \.
 
 
@@ -841,7 +781,7 @@ xihbi780et0hylg9ieqjum0sbb5cytv0	.eJxVjDkOwjAUBe_iGlm2s_2kpM8ZrL84xCy2FCc0iLtDpB
 -- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
+SELECT pg_catalog.setval('public.auth_group_id_seq', 5, true);
 
 
 --
@@ -855,28 +795,28 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 45, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 51, true);
 
 
 --
 -- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 1, false);
+SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 5, true);
 
 
 --
 -- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_user_id_seq', 3, true);
+SELECT pg_catalog.setval('public.auth_user_id_seq', 7, true);
 
 
 --
 -- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
+SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 7, true);
 
 
 --
@@ -887,31 +827,17 @@ SELECT pg_catalog.setval('public.catalog_examen_id_seq', 18, true);
 
 
 --
--- Name: catalog_genre_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.catalog_genre_id_seq', 1, false);
-
-
---
--- Name: catalog_language_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.catalog_language_id_seq', 1, false);
-
-
---
 -- Name: catalog_paciente_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.catalog_paciente_id_seq', 8, true);
+SELECT pg_catalog.setval('public.catalog_paciente_id_seq', 10, true);
 
 
 --
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 34, true);
 
 
 --
@@ -925,7 +851,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 11, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 23, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 29, true);
 
 
 --
@@ -1030,30 +956,6 @@ ALTER TABLE ONLY public.auth_user
 
 ALTER TABLE ONLY public.catalog_examen
     ADD CONSTRAINT catalog_examen_pkey PRIMARY KEY (id);
-
-
---
--- Name: catalog_exameninstance catalog_exameninstance_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.catalog_exameninstance
-    ADD CONSTRAINT catalog_exameninstance_pkey PRIMARY KEY (id);
-
-
---
--- Name: catalog_genre catalog_genre_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.catalog_genre
-    ADD CONSTRAINT catalog_genre_pkey PRIMARY KEY (id);
-
-
---
--- Name: catalog_language catalog_language_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.catalog_language
-    ADD CONSTRAINT catalog_language_pkey PRIMARY KEY (id);
 
 
 --
@@ -1175,20 +1077,6 @@ CREATE INDEX catalog_examen_paciente_id_7a7ae229 ON public.catalog_examen USING 
 
 
 --
--- Name: catalog_exameninstance_borrower_id_b659969b; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX catalog_exameninstance_borrower_id_b659969b ON public.catalog_exameninstance USING btree (borrower_id);
-
-
---
--- Name: catalog_exameninstance_examen_id_079d8b30; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX catalog_exameninstance_examen_id_079d8b30 ON public.catalog_exameninstance USING btree (examen_id);
-
-
---
 -- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1278,22 +1166,6 @@ ALTER TABLE ONLY public.auth_user_user_permissions
 
 ALTER TABLE ONLY public.catalog_examen
     ADD CONSTRAINT catalog_examen_paciente_id_7a7ae229_fk_catalog_paciente_id FOREIGN KEY (paciente_id) REFERENCES public.catalog_paciente(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: catalog_exameninstance catalog_exameninstance_borrower_id_b659969b_fk_auth_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.catalog_exameninstance
-    ADD CONSTRAINT catalog_exameninstance_borrower_id_b659969b_fk_auth_user_id FOREIGN KEY (borrower_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
-
-
---
--- Name: catalog_exameninstance catalog_exameninstance_examen_id_079d8b30_fk_catalog_examen_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.catalog_exameninstance
-    ADD CONSTRAINT catalog_exameninstance_examen_id_079d8b30_fk_catalog_examen_id FOREIGN KEY (examen_id) REFERENCES public.catalog_examen(id) DEFERRABLE INITIALLY DEFERRED;
 
 
 --

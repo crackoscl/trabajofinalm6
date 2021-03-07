@@ -1,25 +1,29 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Tipo de Examen : {{ examen.Nombre }}</h1>
-  <p><strong>Paciente :</strong> <a href="{% url 'paciente-detail' examen.paciente.pk %}">{{ examen.paciente }}</a></p> 
-  <p><strong>Valor examen :</strong> {{ examen.Valor_Examen }}</p>
-  <p><strong>Fecha :</strong> {{ examen.Fecha }}</p>
-  <p><strong>Observaciones :</strong> {{ examen.Observaciones }}</p>
-  <hr>
-  {% if user.is_staff %}
-        {% endif %} 
-        {% if perms.catalog.can_mark_returned %}
-        <button>
-          <a href="{% url 'examen_update' examen.id %}">Editar Examen</a>  
-        </button>    
-  {% endif %}
-  {% if user.is_staff %}
-        {% endif %} 
-        {% if perms.catalog.can_mark_returned %}
-        <button>
-          <a href="{% url 'examen_delete' examen.id %}">Eliminar Examen</a>  
-        </button>  
-  {% endif %}
-  <hr>
+<h1>Tipo de Examen : {{ examen.Nombre }}</h1>
+<p><strong>Paciente :</strong> <a href="{% url 'paciente-detail' examen.paciente.pk %}">{{ examen.paciente }}</a></p>
+<p><strong>Valor examen :</strong> {{ examen.Valor_Examen }}</p>
+<p><strong>Fecha :</strong> {{ examen.Fecha }}</p>
+<p><strong>Observaciones :</strong> {{ examen.Observaciones }}</p>
+<hr>
+{% if perms.catalog.acceso_natural %}
+<button>
+  <a href="{% url 'examen_update' examen.id %}">Editar Examen</a>
+</button>
+{% else %}
+<button>
+  <a>No posees privilegios para editar</a>
+</button>
+{% endif %}
+{% if perms.catalog.acceso_natural %}
+<button>
+  <a href="{% url 'examen_delete' examen.id %}">Eliminar Examen</a>
+</button>
+{% else %}
+<button>
+  <a>No posees privilegios para eliminar</a>
+</button>
+{% endif %}
+<hr>
 {% endblock %}
