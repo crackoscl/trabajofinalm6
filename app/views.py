@@ -1,6 +1,5 @@
 from .models import Examenes, User
 from django.contrib.auth.hashers import make_password
-from typing import ContextManager
 import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -23,22 +22,31 @@ def funcion_permiso_medico(user):
     return user.rol == 'Medico'
 
 
-        
-# from django.db.models import Sum
+
 @login_required(login_url="/login/")
 @user_passes_test(funcion_permiso_medico_paciente) #Login Medico Paciente
 def private(request):
-    porcentajes = dict()
-    # Examenes.objects.values('nombre').annotate(total=Sum('valor')) No funciona :/
-    p_glucosa = sum([int(valor.valor) for valor in Examenes.objects.filter(paciente_id=request.user.id).filter(nombre='glucosa')]) /100
-    p_orina = sum([int(valor.valor) for valor in Examenes.objects.filter(paciente_id=request.user.id).filter(nombre='orina')]) /100
-    p_hemograma = sum([int(valor.valor) for valor in Examenes.objects.filter(paciente_id=request.user.id).filter(nombre='hemograma')]) /100
-    porcentajes['p_glucosa'] = int(p_glucosa)
-    porcentajes['p_orina'] = int(p_orina)
-    porcentajes['p_hemograma'] = int(p_hemograma) 
+    # porcentajes = dict()
+    #intente usar annotate pero no me resulto 
+    prueba = Examenes.objects.filter(paciente_id=request.user.id).values('nombre','valor')
+    data = {}
+    for i in prueba:
+        if i['nombre'] not in data:
+            data[i['nombre']] = round(int(i['valor']) /100) 
+        else:
+            data[i['nombre']] += round(int(i['valor']) /100)
+    print(data)
+    
+
+    # p_glucosa = sum([int(valor.valor) for valor in Examenes.objects.filter(paciente_id=request.user.id).filter(nombre='glucosa')]) /100
+    # p_orina = sum([int(valor.valor) for valor in Examenes.objects.filter(paciente_id=request.user.id).filter(nombre='orina')]) /100
+    # p_hemograma = sum([int(valor.valor) for valor in Examenes.objects.filter(paciente_id=request.user.id).filter(nombre='hemograma')]) /100
+    # porcentajes['p_glucosa'] = int(p_glucosa)
+    # porcentajes['p_orina'] = int(p_orina)
+    # porcentajes['p_hemograma'] = int(p_hemograma) 
     perfiles = User.objects.values()
    
-    return render(request,'app/Privada.html',{'perfiles':perfiles,'porcentajes':porcentajes})
+    return render(request,'app/Privada.html',{'perfiles':perfiles,'porcentajes':data})
    
    
 
