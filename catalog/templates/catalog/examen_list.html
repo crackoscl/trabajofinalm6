@@ -1,0 +1,34 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>Lista de examenes existentes</h1>
+
+{% if user.is_staff %}
+{{ examen.borrower }}
+{% endif %}
+
+{% if perms.catalog.can_mark_returned %}
+{% endif %}
+
+<hr>
+
+{% if examen_list %}
+<ul>
+  {% for examen in examen_list %}
+  <li>
+    <a href="{{ examen.get_absolute_url }}">{{ examen.Nombre }}</a> ({{examen.paciente}})
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Nose encuentran examenes en este apartado.</p>
+{% endif %}
+
+<hr>
+
+<button>
+  <a href="{% url 'examen_create' %}">| Crear nuevo examen |</a>
+</button>
+
+{% endblock %}

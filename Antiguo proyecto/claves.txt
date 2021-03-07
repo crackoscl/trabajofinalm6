@@ -1,0 +1,5 @@
+usuario : luis.jaraquemada@team.awakelab.cl
+clave: 123456
+
+user paciente: jbruna password: 123456
+user medico: jbrunasu password: 123456

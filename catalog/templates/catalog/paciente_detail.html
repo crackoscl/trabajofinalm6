@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Paciente Seleccionado : {{paciente}}</h1>
+  <p>Fecha de Nacimiento : {{paciente.Nacimiento}} <br> {% if paciente.Rut  %} Cedula de Identidad : {{paciente.Rut}}{% endif %}</p>
+  <hr>
+  {% if user.is_staff %}
+        {{ paciente.borrower }}
+        {% endif %} 
+        {% if perms.catalog.can_mark_returned %}
+        <button>
+        <a href="{% url 'paciente_update' paciente.id %}">Editar Paciente</a>  
+        </button>
+  {% endif %}
+  {% if user.is_staff %}
+        {{ paciente.borrower }}
+        {% endif %} 
+        {% if perms.catalog.can_mark_returned %}
+        <button>
+          <a href="{% url 'paciente_delete' paciente.id %}">Eliminar Paciente</a>  
+        </button>        
+  {% endif %}
+  <hr>
+  
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Actuales examenes para este paciente</h4>
+
+    <dl>
+    {% for examen in paciente.examen_set.all %}
+      <dt><a href="{% url 'examen-detail' examen.pk %}">{{examen}}</a> ({{examen.exameninstance_set.all.count}})</dt>
+      <dd>{{examen.summary}}</dd>
+    {% endfor %}
+    </dl>
+  </div>
+{% endblock %}

@@ -1,5 +1,4 @@
-usuario : luis.jaraquemada@team.awakelab.cl
-clave: 123456
+Superusuario:
 
-usuario: jona@wake.com
-clave : 123456
+-Admin
+-159632478

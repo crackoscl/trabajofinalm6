@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>Lista de pacientes existentes</h1>
+
+{% if user.is_staff %}
+{{ paciente.borrower }}
+{% endif %}
+
+{% if perms.catalog.can_mark_returned %}
+{% endif %}
+
+<hr>
+
+{% if paciente_list %}
+<ul>
+  {% for paciente in paciente_list %}
+  <li>
+    <a href="{{ paciente.get_absolute_url }}">{{ paciente.Apellido }}, {{ paciente.Nombre }}
+      ({{paciente.Nacimiento}})</a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Nose encuentran pacientes registrados en este apartado.</p>
+{% endif %}
+
+<hr>
+
+<button>
+  <a href="{% url 'paciente_create' %}">Crear nuevo paciente</a>
+</button>
+
+
+{% endblock %}
