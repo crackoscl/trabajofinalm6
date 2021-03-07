@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+<div class="col py-3">
+    <div class="block-header">
+        <h2>Estadisticas de Examenes</h2>
+        <small class="text-muted"></small>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <h2 class="text-center">Glucosa</h2>
+            <canvas id="glucosa" width="400" height="400"></canvas>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <h2 class="text-center">Hemograma</h2>
+            <canvas id="hemograma" width="400" height="400"></canvas>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <h2 class="text-center">Orina</h2>
+            <canvas id="orina" width="400" height="400"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}

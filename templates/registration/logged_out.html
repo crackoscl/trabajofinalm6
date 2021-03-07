@@ -1,0 +1,9 @@
+{% extends "base_generic.html" %}
+
+{% load static %}
+{% block content %}
+<hr>
+<h1><p>Usted a finalizado su sesion!</p></h1>
+<hr>
+<button type="button" class="btn btn-outline-success"><a href="{% url 'index'%}">Regresar al Inicio.</a></button>
+{% endblock %}
